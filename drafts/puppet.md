@@ -84,6 +84,15 @@ TODO
   * Mac OS X
   * some Network devices
 
+### Agent as Service
+
+* Agent runs as a service
+  * Interval is configureable
+  * Splay can be added for spread agent runs
+  * Default interval is 30 minutes
+* Cronjob can be used as alternative
+* On demand is also possible
+
 ### Example Managing User
 
 * Managing a user without Puppet means managing:
