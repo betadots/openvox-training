@@ -17,10 +17,59 @@ TODO
 
 pics communication cycle
 
-## Facter
+## Impementations
+
+### Puppet Enterprise
+
+* Packaging for additional platforms including additional components
+* Puppet Enterprise Console as Webinterface
+* Additional Components
+  * Puppet Node Manager - group nodes on facts
+  * Puppet Code Manager - combines r10k, Jenkins and beaker for testing and deploying code
+  * Puppet Configuration Manager - helps troubleshoot dependencies
+  * Task Management - combines bolt with Puppet Enterprise Console and Orchestration API
+  * File Sync - keep your environment synchronized over all your Puppet server
+* Supported Modules
+* Automated Provisioning for some platforms
+* Vendor support and service
+
+### Puppet FOSS
 
 TODO
 
+### OpenVox
+
+TODO
+
+## Factor
+
+* Facter returns key value pairs named facts
+* It is used by Puppet to gather information about the node
+* You can also run it on command line to list facts
+
+```bash
+   aio_agent_version => 7.18.0
+   augeas => {
+     version => "1.12.0"
+   }
+   disks => {
+     vda => {
+       size => "10.00 GiB",
+       size_bytes => 10737418240,
+       vendor => "0x1af4"
+     }
+   }
+   ...
+   system_uptime => {
+     days => 0,
+     hours => 2,
+     seconds => 8378,
+     uptime => "2:19 hours"
+   }
+   timezone => UTC
+   virtual => kvm
+```
+   
 ## Puppet Agent
 
 * Agent runs as service on all managed nodes
@@ -66,6 +115,7 @@ user { 'icinga':
   managehome => true,
 }
 ```
+
 ### Resource Abstraction Layer
 
 * Puppet uses a Resource Abstraction Layer
@@ -117,17 +167,102 @@ package { 'vim-enhanced':
 * Puppet server runs jRuby (executed in a JVM)
 * Supported on most Linux distributions
 
-### Classification
-
-TODO
-
 ### Environments
 
-TODO
+* Environments allow to serve different code to different stages
+* Directory enviroments
+  * Path set on the server to serve an environment per directory
+  * Directory contains a main manifest and modules
+* Assignment
+  * Node configuration requests an environment
+  * Server can override it
+* Default environment: production
+
+```bash
+$ ls -l /etc/puppetlabs/code/environments/production
+data  environment.conf  hiera.yaml  manifests  modules
+```
+### Classification
+
+#### Manifest site.pp
+
+* Nodes are another resource type
+* Only objects not declared in modules
+* Matching
+  * Exact match
+  * Regex
+  * Fuzzy name matching via Wildcards
+  * Default
+
+```puppet
+# environments/production/manifests/site.pp
+
+node 'www.example.com' {
+  include apache
+}
+
+node /.example.com$/ {
+  include base
+}
+
+node 'www.example.*' {
+  include nginx
+}
+
+node default {
+  notify { 'Node not configured': }
+}
+```
+
+#### External Node Classifier
+
+* External Node Classifier (ENC) is an alternative to site.pp
+* Script providing a node declaration in yaml format
+  * Simple script logic
+  * Query configuration management database
+  * Communication with a web frontend
+   
+#### Deploying Code to Puppet Server
+
+* Ensure code is valid
+  * Syntax validation
+  * Style guide conformity
+* Use environments for staging
+  * No direct deployment in production
+* Use version control system
+  * History of changes
+  * Enables Collaboration
+  * Hooks enable automatic validation and deployment
 
 ### Hiera
 
-TODO
+* Hierarchy of lookups is configurable
+  * Hierarchy level can be fix or use variables
+  * Hiera 4 was never released as stable, replaced in Puppet 4.9
+  * Environment and module configuration uses Hiera 5
+* Different backends are avaiable
+  * YAML/JSON - default
+  * EYAML - YAML with encrypted fields
+  * MySQL/PostgreSQL - Database lookup
+  * LDAP and more
+
+```yaml
+---
+version: 5
+defaults:
+  # The default value for "datadir" is "data" under the same directory as the hiera.yaml
+  # file (this file)
+  # When specifying a datadir, make sure the directory exists.
+  # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
+  # datadir: data
+  # data_hash: yaml_data
+hierarchy:
+  - name: "Per-node data (yaml version)"
+    path: "nodes/%{::trusted.certname}.yaml"
+  - name: "Other YAML hierarchy levels"
+    paths:
+      - "common.yaml"
+```
 
 ## PuppetDB
 
