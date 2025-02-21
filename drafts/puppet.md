@@ -48,26 +48,26 @@ TODO
 * You can also run it on command line to list facts
 
 ```bash
-   aio_agent_version => 7.18.0
-   augeas => {
-     version => "1.12.0"
-   }
-   disks => {
-     vda => {
-       size => "10.00 GiB",
-       size_bytes => 10737418240,
-       vendor => "0x1af4"
-     }
-   }
-   ...
-   system_uptime => {
-     days => 0,
-     hours => 2,
-     seconds => 8378,
-     uptime => "2:19 hours"
-   }
-   timezone => UTC
-   virtual => kvm
+    aio_agent_version => 7.18.0
+    augeas => {
+      version => "1.12.0"
+    }
+    disks => {
+      vda => {
+        size => "10.00 GiB",
+        size_bytes => 10737418240,
+        vendor => "0x1af4"
+      }
+    }
+    ...
+    system_uptime => {
+      days => 0,
+      hours => 2,
+      seconds => 8378,
+      uptime => "2:19 hours"
+    }
+    timezone => UTC
+    virtual => kvm
 ```
    
 ## Puppet Agent
@@ -108,21 +108,15 @@ TODO
   * Error handling and logging
   * Multiple platforms
 
-#### Example Managing User
-
-* The same task with Puppet
-  * Describe the user
-  * Enforce with Puppet
-
 ```puppet
-user { 'icinga':
-  ensure     => present,
-  gid        => 'icinga',
-  groups     => ['icingacmd'],
-  home       => '/var/spool/icinga',
-  shell      => '/sbin/nologin',
-  managehome => true,
-}
+    user { 'icinga':
+      ensure     => present,
+      gid        => 'icinga',
+      groups     => ['icingacmd'],
+      home       => '/var/spool/icinga',
+      shell      => '/sbin/nologin',
+      managehome => true,
+   }
 ```
 
 ### Resource Abstraction Layer
@@ -151,18 +145,18 @@ TODO: pics of RAL
 * Setting attributes will change state using available provider
 
 ```puppet
-$ puppet resource package vim-enhanced
-package { 'vim-enhanced':
-  ensure => 'purged',
-}
+    $ puppet resource package vim-enhanced
+    package { 'vim-enhanced':
+      ensure => 'purged',
+    }
 ```
 
 ```puppet
-$ puppet resource package vim-enhanced ensure=present
-Notice: /Package[vim-enhanced]/ensure: created
-package { 'vim-enhanced':
-  ensure => '7.4.160-1.el7',
-}
+    $ puppet resource package vim-enhanced ensure=present
+    Notice: /Package[vim-enhanced]/ensure: created
+    package { 'vim-enhanced':
+      ensure => '7.4.160-1.el7',
+    }
 ```
 
 ## Puppet Server
@@ -188,8 +182,8 @@ package { 'vim-enhanced':
 * Default environment: production
 
 ```bash
-$ ls -l /etc/puppetlabs/code/environments/production
-data  environment.conf  hiera.yaml  manifests  modules
+    $ ls -l /etc/puppetlabs/code/environments/production
+    data  environment.conf  hiera.yaml  manifests  modules
 ```
 ### Classification
 
@@ -204,23 +198,23 @@ data  environment.conf  hiera.yaml  manifests  modules
   * Default
 
 ```puppet
-# environments/production/manifests/site.pp
+    # environments/production/manifests/site.pp
 
-node 'www.example.com' {
-  include apache
-}
+    node 'www.example.com' {
+      include apache
+    }
 
-node /.example.com$/ {
-  include base
-}
+    node /.example.com$/ {
+      include base
+    }
 
-node 'www.example.*' {
-  include nginx
-}
+    node 'www.example.*' {
+      include nginx
+    }
 
-node default {
-  notify { 'Node not configured': }
-}
+    node default {
+      notify { 'Node not configured': }
+    }
 ```
 
 #### External Node Classifier
@@ -256,21 +250,21 @@ node default {
   * LDAP and more
 
 ```yaml
----
-version: 5
-defaults:
-  # The default value for "datadir" is "data" under the same directory as the hiera.yaml
-  # file (this file)
-  # When specifying a datadir, make sure the directory exists.
-  # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
-  # datadir: data
-  # data_hash: yaml_data
-hierarchy:
-  - name: "Per-node data (yaml version)"
-    path: "nodes/%{::trusted.certname}.yaml"
-  - name: "Other YAML hierarchy levels"
-    paths:
-      - "common.yaml"
+    ---
+    version: 5
+    defaults:
+      # The default value for "datadir" is "data" under the same directory as the hiera.yaml
+      # file (this file)
+      # When specifying a datadir, make sure the directory exists.
+      # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
+      # datadir: data
+      # data_hash: yaml_data
+    hierarchy:
+      - name: "Per-node data (yaml version)"
+        path: "nodes/%{::trusted.certname}.yaml"
+      - name: "Other YAML hierarchy levels"
+        paths:
+          - "common.yaml"
 ```
 
 ## PuppetDB
