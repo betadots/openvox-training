@@ -173,7 +173,12 @@ More commonly used to declare a sequence between different resources.
 
 ### Metaparameter
 
-TODO
+Metaparameters are attributes that work with any resource type. With metaparameters, you can change how Puppet handles specific resources.
+
+* Add metadata to a resource with the `alias` or `tag` metaparameters
+* Set limits on when the resource should be applied, e.g. `notify` or `require`
+* Prevent Puppet from making changes, by setting the `noop` to `true`
+* Change logging verbosity with `loglevel`
 
 ## Classes
 
