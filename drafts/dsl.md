@@ -16,11 +16,11 @@ TODO daily goal
     * mysql_database
     * vcsrepo
 
-A list can be generated with the **puppet describe** command!
+A list can be generated with the `puppet describe` command!
 
 ### Syntax and Style
 
-Puppet is as much about syntax as about style:
+Puppet is as much about syntax as about style
 
 ```puppet
     type { 'title':
@@ -38,6 +38,24 @@ Puppet is as much about syntax as about style:
     }
 ```
 
+### Exec Resource
+
+* Resource to execute commands
+* Avoid if possible
+* If required use an attribute for idempotence
+  * creates
+  * onlyif / unless
+  * refreshonly
+* Use full path or provide path as attribute
+
+```puppet
+   exec { 'command':
+     path        => '/usr/sbin/:/sbin/',
+     refreshonly => true,
+     timeout     => 60,
+   }
+```
+   
 ### Resource Defaults and Blocks
 
 * Puppet allows you to declare resource defaults
@@ -54,7 +72,7 @@ Puppet is as much about syntax as about style:
     }
 ```
 
-For directories Puppet promotes a mode default of 0644 to 0755.
+For directories Puppet promotes a mode default of `0644` to `0755`.
 
 * With Puppet 4 a block based version was introduced
 
@@ -84,7 +102,7 @@ Allows to reference other managed resources
     Service['sshd']
 ```
 
-Can be used to override parameters:
+Can be used to override parameters
 
 ```puppet
     file { ['/tmp/test', '/root/file.txt']:
@@ -115,24 +133,51 @@ More commonly used to declare a sequence between different resources.
 
 #### Implicit
 
-add some pics
+![Implicit dependencies](implicit_dependencies.png)
 
-#### Explecit
+#### Implicit dependencies of `user`
+
+![Implicit dependencies of user](implicit_dependencies_user.png)
+
+#### Implicit dependencies of `exec`
+
+![Implicit dependencies of user](implicit_dependencies_exec.png)
+
+#### Explicit
 
 * 4 types of relationship
 * Defined by metaparameter of all resources
 * Simple Ordering:
   * require - referenced resource will be applied first
   * before - apply this resource before the reference
+
+![](explicit_dependencies_ordering.png)
+
 * Refresh Events:
   * subscribe - if reference is changed refresh this resource
   * notify - if this resource is changed refresh the reference
 
-add some pics
+![](explicit_dependencies_refresh.png)
+
+#### Dependency Chains
+
+* Alternative syntax for explicit dependency
+* Works great with references
+* Simple Ordering:
+  * before: Package['openssh-server'] -> File['sshd_config']
+  * require: Package['openssh-server'] <- File['sshd_config']
+* Refresh Events:
+  * notify: File['sshd_config'] ~> Service['sshd']
+  * subscribe: File['sshd_config'] <~ Service['sshd']
+* For readability use before (->) and notify (~>)!
 
 ### Metaparameter
 
+TODO
+
 ## Functions
+
+TODO
 
 ## Classes
 
@@ -170,7 +215,7 @@ To direct Puppet to include or instantiate a given class. To declare classes, us
 
 #### Idempotency of include
 
-* The function include is idempotent. That means you can use the include of the same class several times in your code.
+* The function include is idempotent. That means you can use the `include` of the same class several times in your code.
 
 ```puppet
     include apache
@@ -199,6 +244,16 @@ Classes must correspond to the namespaces in the name.
     }
 
     include base::base
+```
+
+### Refernces of Classes
+
+The reference to a class consists of the keyword `Class` and its namespace:
+
+```puppet
+    Class['class namespace']
+
+    Class['base::ssh']
 ```
 
 ## Variables
@@ -230,32 +285,40 @@ Classes must correspond to the namespaces in the name.
   * Resource References
   * Default
 
+```puppet
+    $num  = 4711
+    $bool = true
+    $arr  = ['item1', 4711]
+    $hsh  = { key1 => 'value1', key2 => 4711 } 
+```
+
 * Abstract Data Types
   * Flexible Data Types
   * Parent Types
 
 ### Scope
 
-add pics of sopce
+![Variable scope](scope-euler-diagram.png)
 
 ### Accessing Variables
 
-**Shortname accesses Local Scope**:
+Shortname accesses Local Scope
 ```puppet
     $httpd_confdir
 ```
 
-**Qualified name accesses scope defined by namespace**:
-Top Scope (also contains facts) and Node Scope:
+Qualified name accesses scope defined by namespace
+
+* Top Scope (also contains facts) and Node Scope:
 ```puppet
     $::kernel
 ```
-Out-of-Scope:
+* Out-of-Scope:
 ```puppet
     $apache:mod::status::extended_status
 ```
 
-**Interpolation**:
+Interpolation
 
 ```puppet
     $httpd_confdir = "${conf_dir}/httpd}"
@@ -263,7 +326,19 @@ Out-of-Scope:
 
 ### Facts
 
-also add trusted facts
+* All determined facts of a node are available as top scope variables during the compilation of the catalog:
+
+```puppet
+    $facts['kernel']
+```
+
+* All trusted information such as certname or all other properties from the certifikate are also avaiable':
+
+```puppet
+    $trusted['certname']
+```
+
+**Notice**: $trusted is empty during a `puppet apply`.
 
 ### Parameterized Classes
 
@@ -294,9 +369,17 @@ also add trusted facts
     }
 ```
 
+## Defined Resources
+
+TODO
+
 ## Modules
 
+TODO
+
 ### Parameter Lookup
+
+TODO
 
 ### Puppet Forge
 
@@ -314,4 +397,8 @@ http://forge.puppet.com
 
 ## Templates
 
+TODO
+
 ## Defined Resources
+
+TODO

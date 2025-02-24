@@ -15,7 +15,7 @@ TODO
 
 ## Workflow
 
-pics communication cycle
+![Puppet Workflow](puppet_workflow.png)
 
 ## Impementations
 
@@ -127,7 +127,9 @@ TODO
 * Resources can be declared always in the same fashion
 * A resource will be managed by the best matching provider on the platform
 
-TODO: pics of RAL
+A list can be generated with the `puppet describe -l` command!
+
+![Resource Abstraction Layer](resource_abstraction_layer.png)
 
 #### Providers
 
@@ -158,6 +160,8 @@ TODO: pics of RAL
       ensure => '7.4.160-1.el7',
     }
 ```
+
+You get something similar to a man-page also with the `puppet describe` command!
 
 ## Puppet Server
 
@@ -194,7 +198,7 @@ TODO: pics of RAL
 * Matching
   * Exact match
   * Regex
-  * Fuzzy name matching via Wildcards
+  * Fuzzy name matching via wildcards
   * Default
 
 ```puppet
