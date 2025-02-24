@@ -175,10 +175,6 @@ More commonly used to declare a sequence between different resources.
 
 TODO
 
-## Functions
-
-TODO
-
 ## Classes
 
 Classes offering a way of grouping resources together and assigning data.
@@ -201,7 +197,7 @@ To specify the contents and behavior of a class. Defining a class doesn't automa
 **Declare**:
 To direct Puppet to include or instantiate a given class. To declare classes, use the include function. This tells Puppet to evaluate the class and manage all the resources declared within it.
 
-* with include Function
+* with include function
 
 ```puppet
     include apache
@@ -269,6 +265,9 @@ The reference to a class consists of the keyword `Class` and its namespace:
 * Can be used in expressions, functions and resource attributes
 * Some naming conventions enforced, some keywords reserved
 * Depending on scope
+
+  ![Variable scope](scope-euler-diagram.png)
+
 * Different data types
 * Actually are constants!
 
@@ -296,10 +295,6 @@ The reference to a class consists of the keyword `Class` and its namespace:
   * Flexible Data Types
   * Parent Types
 
-### Scope
-
-![Variable scope](scope-euler-diagram.png)
-
 ### Accessing Variables
 
 Shortname accesses Local Scope
@@ -309,11 +304,11 @@ Shortname accesses Local Scope
 
 Qualified name accesses scope defined by namespace
 
-* Top Scope (also contains facts) and Node Scope:
+* Top Scope and Node Scope
 ```puppet
     $::kernel
 ```
-* Out-of-Scope:
+* Out-of-Scope
 ```puppet
     $apache:mod::status::extended_status
 ```
@@ -323,6 +318,14 @@ Interpolation
 ```puppet
     $httpd_confdir = "${conf_dir}/httpd}"
 ```
+
+Array item and hash value
+
+```puppet
+    $arr[0]
+
+    $hsh['key']
+``` 
 
 ### Facts
 
@@ -339,6 +342,102 @@ Interpolation
 ```
 
 **Notice**: $trusted is empty during a `puppet apply`.
+
+### Conditionals
+
+* Puppet supports four types of conditionals
+  * selectors
+  * case statements
+  * if statements
+  * unless statements
+* Can be used to
+  * return values
+  * alter code logic
+
+#### Selectors
+
+* Good for assigning conditional values to variables
+
+```puppet
+    $apache_package = $facts['os']['family'] ? {
+      'RedHat' => 'httpd',
+      default  => 'apache2',
+    }
+
+    package { 'apache':
+      ensure => installed,
+      name   => $apache_package,
+    }
+```
+
+#### Case Statement
+
+* Ideal for: 
+  * Setting multiple variables at once
+  * Choosing different branches of code
+
+```puppet
+     case $facts['os']['family'] {
+      'RedHat': {
+        $apache_package = 'httpd'
+        $apache_confdir = '/etc/httpd'
+      }
+      default: {
+        $apache_package = 'apache2'
+        $apache_confdir = '/etc/apache2'
+      }
+    }
+```
+
+#### If Statement
+
+* Used to make a choice based on a truth value
+* Can use:
+  * boolean value
+  * conditional expressions
+  * regular expressions
+  * chain of expressions
+
+```puppet
+    if $ensure == 'present' or $ensure == 'installed' {
+      package { 'telnet':
+        ensure => present,
+      }
+    } elsif $ensure =~ /^(absent|purged)$/ {
+      package { 'telnet':
+        ensure => purged,
+      }
+    } else {
+      fail("${ensure} is not valid")
+    }
+```
+
+* Can also be used to assign variables directly
+
+```puppet
+   $_real_package_name = if $facts['os']['family'] == 'RedHat' {
+     'httpd'
+   } else {
+     'apache2'
+   }
+```
+
+#### Unless Staement
+
+* Reversed if statement
+* No elsif clause possible
+
+```puppet
+    unless $ensure =~ /^(absent|purged)$/ {
+      package { 'telnet':
+        ensure => present,
+      }
+    } else {
+      package { 'telnet':
+        ensure => purged,
+      }
+    }
+```
 
 ### Parameterized Classes
 
@@ -369,17 +468,205 @@ Interpolation
     }
 ```
 
+## Functions
+
+* Always executed on the server during Catalog Compilation
+* Two types:
+  * statement - executes an action
+  * rvalue - returns a value
+* Basic functions included in Puppet, e.g.:
+  * fail - statement to fail catalog compilation with the provided message
+  * template - rvalue returning an erb template as string
+  * versioncmp - rvalue returning a number indicating if a version is higher or lower
+* Additional functions can be provided by modules
+
+### Iteration
+
+* Puppet comes with some iteration functions
+  * each - repeat a code block for each object
+  * slice - repeat a code block a given number of times
+  * filter - remove non-matching elements
+  * map - transform values to some data structure
+  * reduce - combine values to a new data structure
+  * with - create a private code block (no real iteration)
+
+```puppet
+    $binaries = ['facter', 'hiera', 'mco', 'puppet', 'puppetserver']
+
+    $binaries.each |String $binary| {
+      file {"/usr/bin/${binary}":
+        ensure => link,
+        target => "/opt/puppetlabs/bin/${binary}",
+      }
+    }
+```   
+
+## Templates
+
+Implemented by a function call:
+
+* template
+  * uses Embedded Ruby in templates
+  * all variables in the scope are passed to the template
+  * can handle multiple templates
+
+```puppet
+    template('file.erb')
+```
+
+* epp
+  * uses Embedded Puppet in templates
+  * a hash with parameter has to be passed to the template
+
+```puppet
+    epp('file.epp', { 'parameter' => 'value' })
+```
+
+* inline versions of both functions exists
+
+### ERB Syntax
+
+Simple textfile including some Ruby code:
+
+```ruby
+    <%# Comment not printed in file -%>
+
+    <% if @variable == true -%>
+    Print this <%= @variable %>
+    <% end -%>
+
+    <% @values.each do |value| -%>
+    Value is <%= value %>
+    <% end -%>
+```
+
+### EPP Syntax
+
+Simple textfile including some Puppet code:
+
+```puppet
+    <%- | Boolean $variable = true,
+          Array   $values
+    | -%>
+    <%# Comment not printed in file -%>
+
+    <% if $variable == true { -%>
+    Print this <%= $variable %>
+    <% } -%>
+
+    <% $values.each |value| { -%>
+    Value is <%= value %>
+    <% } -%>
+``` 
+
 ## Defined Resources
 
-TODO
+* Very similar to parameterized classes
+* But can be used multiple times
+
+### Definition
+
+```puppet
+    define apache::vhost (
+       $docroot,
+       $port       = '80',
+       $priority   = '10',
+       $options    = 'Indexes MultiViews',
+       $vhost_name = $title,
+       $servername = $title,
+    ) {
+      file { "/etc/httpd/conf.d/${title}.conf":
+        ensure  => file,
+        owner   => 'apache',
+        group   => 'apache',
+        mode    => '0644',
+        content => template('apache/vhost.conf.erb'),
+        notify  => Service['httpd'],
+      }
+    }
+```   
+
+### Declaration
+
+* Declared like every other resource
+
+    type { title: }
+
+* Using hash to declare multiple defined resources
+
+```puppet
+    $resources_hash.each |$name, $resource| { 
+    type {
+      default:
+        * => $defaults_hash; 
+      $name:
+        * => $resource;
+      }
+    }
+```
 
 ## Modules
 
-TODO
+* Modules are a pre-defined structure for encapsulating related configuration
+* This enables:
+  * auto-loading of classes
+  * file-serving for templates and files
+  * auto-delivery of custom Puppet extensions
+  * easy sharing with others
+
+### Structure of Modules
+
+```text
+modulename
+|-- facts.d        <- external facts
+|-- files          <- static files
+|-- functions      <- custom functions written in Puppet code
+|-- lib
+|   |-- facter     <- facts written in Ruby
+|   `-- puppet     <- custom functions, types and providers
+|-- manifests      <- Puppet classes
+|-- metadata.json  <- Module description
+|-- spec           <- unit tests
+|-- templates      <- dynamic files in erb or epp syntax
+|-- types          <- custom data types
+`-- examples       <- smoke tests
+```
+
+### Autoloading
+
+Classes in directory manifests:
+
+* Default class named like the module found in init.pp
+* Classes in files matching there names
+  * module::example in example.pp
+  * module::example::complex in example/complex.pp
+
+Files in directory files:
+
+* Served by Puppet fileserver as 'puppet:///modules/modulename/filename'
+
+Templates directory in templates:
+
+* Lookup by Puppet template functions like
+  * Embedded Ruby: 'template(modulename/filename.erb)'
+   * Embedded Puppet: 'epp(modulename/filename.epp)'
 
 ### Parameter Lookup
 
-TODO
+* Separation of configuration and data
+* Automatic Lookup of parameters was introduced in Puppet 3
+* Improvements in Puppet 4.9
+* Default is
+  * Hiera, a hierachical lookup
+  * One global configuration
+
+### Data in Modules
+
+* Similar to environment data
+* Replaced params.pp pattern
+  * No inheritance (deprecated)
+  * Better separation between code and data
+  * Easier enhanced for supporting additional operatingsystems
 
 ### Puppet Forge
 
@@ -395,10 +682,16 @@ http://forge.puppet.com
   * Install
   * List installed modules
 
-## Templates
+#### Working with the Forge
 
-TODO
+The GitHub repositories can also be used directly for the following.
 
-## Defined Resources
+* Use as there are
+  * Documentation
+  * Parameterized
+  * Push changes upstream
+  * Wrap around them
+* Use as inspiration
+  * Keep it simple
 
-TODO
+TODO puppet module install, control repo, Puppetfile, dependencies
