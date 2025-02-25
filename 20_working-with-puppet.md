@@ -128,7 +128,7 @@ Qualified name accesses scope defined by namespace
 
 * Top Scope
 ```puppet
-    $::kernel
+    $::motd_file
 ```
 * Out-of-Scope
 ```puppet
@@ -186,13 +186,15 @@ Qualified name accesses scope defined by namespace
     $facts['os']['family']
 ```
 
+**Notice**: Access like `$::kernel` or `$::os['family']` is deprcated and will not be supported in the future.
+
 * All trusted information such as certname or all other properties from the certifikate are also avaiable':
 
 ```puppet
     $trusted['certname']
 ```
 
-**Notice**: $trusted is empty during a `puppet apply`.
+**Notice**: $trusted is empty during a `puppet apply` if the node has no certificate!
 
 
 ## Modules
@@ -240,5 +242,10 @@ The GitHub repositories can also be used directly for the following.
 * Check the content of your `./modules` directory
 
 ### Puppetfile
+
+* Specify which modules and data you wanna be installed
+* For automation `r10k` from package `bolt` is used
+* Caution: Dependencies are not automatically resolved
+* But there is the tool `r10k-resolve` what supports you
 
 
