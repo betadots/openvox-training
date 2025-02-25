@@ -271,7 +271,7 @@ The reference to a class consists of the keyword `Class` and its namespace:
 * Some naming conventions enforced, some keywords reserved
 * Depending on scope
 
-  ![Variable scope](scope-euler-diagram.png)
+  ![Variable scope](../images/scope-euler-diagram.png)
 
 * Different data types
 * Actually are constants!

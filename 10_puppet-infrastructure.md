@@ -1,10 +1,6 @@
-# Puppet Environment
+# Puppet Environment and Infrastructure
 
-## Trainings Setup
-
-TODO
-
-## Concept
+## Concept and Workflow
 
 * Puppet is about abstraction
 * Domain Specific Language allows for an abstract description of resources
@@ -13,9 +9,14 @@ TODO
 * Define the desired state and not how to get there
   * Idempotence
 
-## Workflow
+  ![Puppet Workflow](images/puppet_workflow.png)
 
-![Puppet Workflow](../omages/puppet_workflow.png)
+### Idempotency
+
+* Key point of Puppet
+* No matter how often the same catalog is applied to a node, the state is still the same as after the first run.
+* This means if several puppet runs are required to achieve the desired state, something is wrong.
+
 
 ## Impementations
 
@@ -40,6 +41,7 @@ TODO
 ### OpenVox
 
 TODO
+
 
 ## Factor
 
@@ -69,7 +71,8 @@ TODO
     timezone => UTC
     virtual => kvm
 ```
-   
+
+
 ## Puppet Agent
 
 * Agent runs as service on all managed nodes
@@ -77,7 +80,7 @@ TODO
 * Sends information about itself to determine the configuration state (facts)
 * Enforces the retrieved configuration state (catalog)
 * Report enforcement back to server
-* Supported platforms: 
+* Supported platforms:
   * most Linux distributions
   * Windows
   * many Unix distributions
@@ -92,6 +95,22 @@ TODO
   * Default interval is 30 minutes
 * Cronjob can be used as alternative
 * On demand is also possible
+
+### Resources
+
+With Puppet, everything that is managed is a resource or is traced back to one or more.
+
+```puppet
+    type { 'title':
+      attribute1 => 'value1',
+      ...
+      attributeN => 'valueN',
+    }
+```
+
+* Different types of resources have a differnt set of attributes
+* But there are attributes, the so-called **meta attributes**, which exist for every resource type 
+* With **defined resources** you can define your own types to extend Puppet
 
 ### Example Managing User
 
@@ -129,7 +148,7 @@ TODO
 
 A list can be generated with the `puppet describe -l` command!
 
-![Resource Abstraction Layer](../images/resource_abstraction_layer.png)
+  ![Resource Abstraction Layer](images/resource_abstraction_layer.png)
 
 #### Providers
 
@@ -137,8 +156,10 @@ A list can be generated with the `puppet describe -l` command!
 * Can be marked as default for specific facts (typically operatingsystem)
 * Can support all or only a subset of features a resource type requires
 * Example for resource package
-  * **Providers**: *aix appdmg apple apt aptitude aptrpm blastwave dnf dpkg fink freebsd gem hpux macports nim openbsd opkg pacman pip3 pip pkg pkgdmg pkgin pkgng pkgutil portage ports portupgrade puppet_gem rpm rug sun sunfreeware up2date urpmi windows yum zypper*
-  * **Features**: *holdable install_options installable package_settings purgeable reinstallable uninstall_options uninstallable upgradeable versionable virtual_packages*
+  * **Providers**: *aix appdmg apple apt aptitude aptrpm blastwave dnf dpkg fink freebsd gem hpux macports nim openbsd pkg pacman pip3 pip pkg pkgdmg pkgin pkgng pkgutil portage ports portupgrade puppet_gem rpm rug sun sunfreeware up2date urpmi windows yum zypper*
+  * **Features**: *holdable install_options installable package_settings purgeable reinstallable uninstall_options unins
+tallable upgradeable versionable virtual_packages*
+* With the **meta parameter** `provider`, the provider can be explicitly selected for each resource
 
 #### Puppet Resource Command
 
@@ -163,6 +184,7 @@ A list can be generated with the `puppet describe -l` command!
 
 You get something similar to a man-page also with the `puppet describe` command!
 
+
 ## Puppet Server
 
 * The server runs on a central machine
@@ -174,102 +196,18 @@ You get something similar to a man-page also with the `puppet describe` command!
 * Puppet server runs jRuby (executed in a JVM)
 * Supported on most Linux distributions
 
-### Environments
-
-* Environments allow to serve different code to different stages
-* Directory enviroments
-  * Path set on the server to serve an environment per directory
-  * Directory contains a main manifest and modules
-* Assignment
-  * Node configuration requests an environment
-  * Server can override it
-* Default environment: production
-
-```bash
-    $ ls -l /etc/puppetlabs/code/environments/production
-    data  environment.conf  hiera.yaml  manifests  modules
-```
-### Classification
-
-#### Manifest site.pp
-
-* Nodes are another resource type
-* Only objects not declared in modules
-* Matching
-  * Exact match
-  * Regex
-  * Fuzzy name matching via wildcards
-  * Default
-
-```puppet
-    # environments/production/manifests/site.pp
-
-    node 'www.example.com' {
-      include apache
-    }
-
-    node /.example.com$/ {
-      include base
-    }
-
-    node 'www.example.*' {
-      include nginx
-    }
-
-    node default {
-      notify { 'Node not configured': }
-    }
-```
-
-#### External Node Classifier
-
-* External Node Classifier (ENC) is an alternative to site.pp
-* Script providing a node declaration in yaml format
-  * Simple script logic
-  * Query configuration management database
-  * Communication with a web frontend
-   
-#### Deploying Code to Puppet Server
+### Deploying Code to Puppet Server
 
 * Ensure code is valid
   * Syntax validation
   * Style guide conformity
 * Use environments for staging
   * No direct deployment in production
-* Use version control system
+* **Use a version control system**
   * History of changes
   * Enables Collaboration
-  * Hooks enable automatic validation and deployment
+  * Hooks or pipelines enable **automatic validation and deployment**
 
-### Hiera
-
-* Hierarchy of lookups is configurable
-  * Hierarchy level can be fix or use variables
-  * Hiera 4 was never released as stable, replaced in Puppet 4.9
-  * Environment and module configuration uses Hiera 5
-* Different backends are avaiable
-  * YAML/JSON - default
-  * EYAML - YAML with encrypted fields
-  * MySQL/PostgreSQL - Database lookup
-  * LDAP and more
-
-```yaml
-    ---
-    version: 5
-    defaults:
-      # The default value for "datadir" is "data" under the same directory as the hiera.yaml
-      # file (this file)
-      # When specifying a datadir, make sure the directory exists.
-      # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
-      # datadir: data
-      # data_hash: yaml_data
-    hierarchy:
-      - name: "Per-node data (yaml version)"
-        path: "nodes/%{::trusted.certname}.yaml"
-      - name: "Other YAML hierarchy levels"
-        paths:
-          - "common.yaml"
-```
 
 ## PuppetDB
 
@@ -284,6 +222,7 @@ You get something similar to a man-page also with the `puppet describe` command!
   * Clojure (dialect of Lisp runs in JVM)
   * PostgreSQL
 
+
 ## Puppet Apply
 
 * The Puppet apply command combines server and agent functionality
@@ -292,5 +231,6 @@ You get something similar to a man-page also with the `puppet describe` command!
   * Compiles a catalog
   * Enforces the configuration
   * Can also run in simulation mode
-* Useful for development and local testing or server-less setups
+* Useful for **development and local testing** or server-less setups
 * Requires root privileges
+

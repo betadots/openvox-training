@@ -22,7 +22,7 @@ Git is a distributed version control system that tracks versions of files.
 
 ## Workflow
 
-add pic of directory and snapshots
+![Git workflow and working with snapshots](git_snapshots.png)
 
 ```bash
 $ git clone git@github.com:voxpupuli/puppet-icinga2.git
@@ -76,7 +76,7 @@ To /root/repo
 * Delete
   * git branch -d \<branch name> 
 
-pic of working with branches
+![Working with branches](git_branches.png)
 
 ```bash
 ✔ ~/puppet-icinga2 [main|✔]
