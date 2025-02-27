@@ -287,7 +287,7 @@ mod 'icinga2',
 * Create a `Puppetfile` in your environment directory
 * Add module `puppetlabs/motd` and its dependencies to your `Puppetfile`
 * Remove all directores from directory `./modules/` via `rm -rf modules/*`
-* Now execute `r10k puppetfile install -v` to reinstall the desired modules
+* Now execute `/opt/puppetlabs/bolt/bin/r10k puppetfile install -v` to reinstall the desired modules
 * Check the content of the `./modules/` directory
 
 
@@ -302,7 +302,8 @@ To specify the contents and behavior of a class. Defining a class doesn't automa
 
 ```puppet
     class base(
-      String $motd_file = '/etc/motd',
+      Boolean               $motd      = true,
+      Stdlib::Absolutepath  $motd_file = '/etc/motd',
     ) {
       file { $motd_file:
         ensure => file,
@@ -388,6 +389,11 @@ Templates directory in ***templates***:
   * Embedded Ruby: 'template(modulename/filename.erb)'
   * Embedded Puppet: 'epp(modulename/filename.epp)'
 
+**Practice**:
+* Examine the `puppetlabs/motd` module
+* and use it to manage a message of the day
+* add your code to yout node declaration in *manifests/site.pp*
+
 ### Parameter Lookup
 
 * Separation of configuration and data
@@ -426,3 +432,84 @@ Templates directory in ***templates***:
         paths:
           - "common.yaml"
 ```
+
+**Notice**: Facts can also be used in `hiera.yaml` to control the lookup behavior!
+
+**Practice**:
+* Rewrite your node declarition to use only an `include motd` instead of a declaration with `class`
+* Add key `motd::content` with any value to ***data/common.yaml***
+* Run `puppet aplly` and check the result
+* Add a diffrent value to the same key in ***data/nodes/\<your certname\>.yaml***
+* Tip: To get the correct certname use `puppet config print certname`
+* Rerun `puppet apply`
+
+**Bonus**:
+* Add a new layer between *nodes* and *common.yaml* named `operatingsystem data (yaml version)` based on `facts.os.family`
+* Add yaml file for the osfamily of your machine
+* Play around with `motd::content` or other parameter of that class
+
+## Profile and other Site Modules
+
+### Roles-Profiles-Pattern
+
+* Puppet is all about abstraction
+* Wants to simplify things
+* Good module design
+  * compose system configuration
+  * interchangeable
+* Roles-Profiles-Pattern takes this to the next level
+  * Component Modules - technical implementation
+  * Profile - site specific implementation
+  * Role - business logic
+
+#### Component Modules
+
+![component modules](images/component_modules.png)
+
+```puppet
+    class apache (
+      $apache_name            = $::apache::params::apache_name,
+      $service_name           = $::apache::params::service_name,
+      $default_mods           = true,
+      $default_vhost          = true,
+      ...
+    }
+```
+
+#### Profile Modules
+
+![profile modules](images/profile_modules.png)
+
+```puppet
+    class profile::base {
+      include ssh
+      include postfix::mta
+
+      class { 'motd':
+        template => 'profile/motd_base.erb'
+      }
+      ...
+    }
+```
+
+#### Role Modules (Optional)
+
+Optional? Can also be mapped via hiera.
+
+![role modules](images/role_modules.png)
+
+```puppet
+    class role::webserver::external {
+      include profile::base::hardening
+      include profile::webserver::typo3
+    }
+```
+
+**Practice**:
+* Create a dircetory *site-modules* in your environment
+* Add this one to the `modulepath` in the *environment.conf*
+* Create a new module `profile` to the new path
+* Add a class `base` to the new module
+* Transfer the declarations from your *site.pp* to the new class
+* and replace the declaration in your *site.pp* with your new class
+* Run `puppet apply`

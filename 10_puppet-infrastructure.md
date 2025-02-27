@@ -47,7 +47,7 @@ TODO
 
 * Facter returns key value pairs named facts
 * It is used by Puppet to gather information about the node
-* You can also run it on command line to list facts
+* You can also run it on command line `facter` to list facts
 
 ```bash
     aio_agent_version => 7.18.0
@@ -72,6 +72,19 @@ TODO
     virtual => kvm
 ```
 
+To get a special value of the structured data, use for example `facter timezone` or `facter disks.vda`.
+
+```bash
+    facter disks.vda
+    {
+      size => "10.00 GiB",
+      size_bytes => 10737418240,
+      vendor => "0x1af4"
+    }
+
+    facter disks.vda.size
+    10.00 GiB
+```
 
 ## Puppet Agent
 
