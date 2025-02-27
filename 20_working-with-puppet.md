@@ -403,6 +403,7 @@ Templates directory in ***templates***:
   * Hiera, a hierachical lookup
   * One global configuration
 
+
 ## Hiera
 
 * Hierarchy of lookups is configurable
@@ -448,9 +449,7 @@ Templates directory in ***templates***:
 * Add yaml file for the osfamily of your machine
 * Play around with `motd::content` or other parameter of that class
 
-## Profile and other Site Modules
-
-### Roles-Profiles-Pattern
+## Roles-Profiles-Pattern
 
 * Puppet is all about abstraction
 * Wants to simplify things
@@ -462,7 +461,7 @@ Templates directory in ***templates***:
   * Profile - site specific implementation
   * Role - business logic
 
-#### Component Modules
+### Component Modules
 
 ![component modules](images/component_modules.png)
 
@@ -476,7 +475,7 @@ Templates directory in ***templates***:
     }
 ```
 
-#### Profile Modules
+### Profile Modules
 
 ![profile modules](images/profile_modules.png)
 
@@ -492,7 +491,7 @@ Templates directory in ***templates***:
     }
 ```
 
-#### Role Modules (Optional)
+### Role Modules (Optional)
 
 Optional? Can also be mapped via hiera.
 
@@ -513,3 +512,85 @@ Optional? Can also be mapped via hiera.
 * Transfer the declarations from your *site.pp* to the new class
 * and replace the declaration in your *site.pp* with your new class
 * Run `puppet apply`
+
+
+## Templates
+
+Implemented by a function call:
+
+* template
+  * uses Embedded Ruby in templates
+  * all variables in the scope are passed to the template
+  * can handle multiple templates
+
+```puppet
+    template('file.erb')
+```
+
+* epp
+  * uses Embedded Puppet in templates
+  * a hash with parameter has to be passed to the template
+
+```puppet
+    epp('file.epp', { 'parameter' => 'value' })
+```
+
+* inline versions of both functions exists
+
+### Functions
+
+* Always executed on the server during Catalog Compilation (expect the Deferred function)
+* Two types:
+  * statement - executes an action
+  * rvalue - returns a value
+* Basic functions included in Puppet, e.g.:
+  * fail - statement to fail catalog compilation with the provided message
+  * template - rvalue returning an erb template as string
+  * versioncmp - rvalue returning a number indicating if a version is higher or lower
+* Additional functions can be provided by modules
+
+### ERB Syntax
+
+Simple textfile including some Ruby code:
+
+```ruby
+    <%# Comment not printed in file -%>
+
+    <% if @variable == true -%>
+    Print this <%= @variable %>
+    <% end -%>
+
+    <% @values.each do |value| -%>
+    Value is <%= value %>
+    <% end -%>
+```
+
+### EPP Syntax
+
+Simple textfile including some Puppet code:
+
+```puppet
+    <%- | Boolean $variable = true,
+          Array   $values
+    | -%>
+    <%# Comment not printed in file -%>
+
+    <% if $variable == true { -%>
+    Print this <%= $variable %>
+    <% } -%>
+
+    <% $values.each |value| { -%>
+    Value is <%= value %>
+    <% } -%>
+```
+
+**Keep in mind**: this is puppet code, access to variables out of scope is possible!
+
+**Practice**:
+* Write a EPP template without parameterization for `motd` in your `profile` module
+* Use some facts in your message
+* Reconfigure your hiera data to use the template
+* Run `puppet apply`
+
+**Bonus**:
+* Extend then template to output a variable from `profile::base` scope
