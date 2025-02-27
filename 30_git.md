@@ -22,7 +22,7 @@ Git is a distributed version control system that tracks versions of files.
 
 ## Workflow
 
-![Git workflow and working with snapshots](../images/git_snapshots.png)
+![Git workflow and working with snapshots](images/git_snapshots.png)
 
 ```bash
 $ git clone git@github.com:voxpupuli/puppet-icinga2.git
@@ -59,6 +59,19 @@ To /root/repo
    1a2190b..3747668  main -> main
 ```
 
+**Joint Practice**:
+* Change to yout environment directory root
+* Create a git repository `git init`
+* Add a file *.gitignore* with one line: `modules` to explude the modules directory from git
+* Check `git status`
+* Rename the current branch `git branch -m student\<N\>`
+* Create a connection to the remote repository `git remote add origin git@g\<git url\>:control.git`
+* Add files and directories to your new repository `git add .`
+* Check `git status`
+* Do yout first commit `git commit -m 'Initial commit'`
+* Synchronize the local repository with the remote `git push origin production`
+
+
 ## Branches
 
 * Create
@@ -76,7 +89,7 @@ To /root/repo
 * Delete
   * git branch -d \<branch name> 
 
-![Working with branches](../images/git_branches.png)
+![Working with branches](images/git_branches.png)
 
 ```bash
 ✔ ~/puppet-icinga2 [main|✔]
