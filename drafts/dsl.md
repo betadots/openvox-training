@@ -654,7 +654,7 @@ Templates directory in templates:
 
 * Lookup by Puppet template functions like
   * Embedded Ruby: 'template(modulename/filename.erb)'
-   * Embedded Puppet: 'epp(modulename/filename.epp)'
+  * Embedded Puppet: 'epp(modulename/filename.epp)'
 
 ### Parameter Lookup
 

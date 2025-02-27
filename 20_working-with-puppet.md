@@ -210,7 +210,7 @@ Modules usually offer the possibility to manage a service or an application as o
 
 ### Puppet Forge
 
-http://forge.puppet.com
+*http://forge.puppet.com*
 
 * Community platform for modules
   * Thousands of modules by many different authors
@@ -218,7 +218,6 @@ http://forge.puppet.com
   * Supported, Partner supported and Approved Modules
   * Number of Downloads and Scoring system
 * Command Line Interface `puppet module`
-  * Search
   * Install
   * List installed modules
 
@@ -241,11 +240,189 @@ The GitHub repositories can also be used directly for the following.
 * Use `puppet module install` to download and install the module motd into your `./modules` directory
 * Check the content of your `./modules` directory
 
+### Structure of Modules
+
+```text
+modulename
+|-- facts.d        <- external facts
+|-- files          <- static files
+|-- functions      <- custom functions written in Puppet code
+|-- lib
+|   |-- facter     <- facts written in Ruby
+|   `-- puppet     <- custom functions, types and providers
+|-- manifests      <- Puppet classes
+|-- metadata.json  <- Module description, especially module dependencies
+|-- spec           <- unit tests
+|-- templates      <- dynamic files in erb or epp syntax
+|-- types          <- custom data types
+`-- examples       <- smoke tests
+```
+
 ### Puppetfile
 
 * Specify which modules and data you wanna be installed
+  * downloads modules from puppetforge
+  * but also any data from any git repository
 * For automation `r10k` from package `bolt` is used
 * Caution: Dependencies are not automatically resolved
 * But there is the tool `r10k-resolve` what supports you
 
+```ruby
+# optional the forge for downloads, default to
+forge 'http://forge.puppetlabs.com'
 
+mod 'puppetlabs/concat', :latest
+mod 'puppetlabs/stdlib', '9.2.0'
+mod 'puppet/systemd'
+
+mod 'icinga',
+    :git => 'https://github.com/voxpupuli/puppet-icinga'
+    :tag => 'v6.0.1'
+mod 'icinga2',
+    :git => 'git@github.com:voxpupuli/puppet-icinga2.git'
+    :branch => 'fix/344'
+```
+
+**Practice**:
+* Create a `Puppetfile` in your environment directory
+* Add module `puppetlabs/motd` and its dependencies to your `Puppetfile`
+* Remove all directores from directory `./modules/` via `rm -rf modules/*`
+* Now execute `r10k puppetfile install -v` to reinstall the desired modules
+* Check the content of the `./modules/` directory
+
+
+## Classes
+
+Classes offering a way of grouping resources together and assigning data.
+
+### Defining vs. Declaring
+
+**Define**:
+To specify the contents and behavior of a class. Defining a class doesn't automatically include it in a configuration; it simply makes it available to be declared.
+
+```puppet
+    class base(
+      String $motd_file = '/etc/motd',
+    ) {
+      file { $motd_file:
+        ensure => file,
+        conatnet => 'Hello my friend!',
+      }
+      ...
+    }
+```
+
+**Declare**:
+To direct Puppet to include or instantiate a given class. To declare classes, use the include function. This tells Puppet to evaluate the class and manage all the resources declared within it.
+
+* with include function
+
+```puppet
+    include base
+```
+
+* like any other resources, setting parameters are optional
+
+```puppet
+    class { 'base':
+      motd_file => '/etc/motd.new',
+    }
+```
+
+#### Idempotency of include
+
+* The function include is idempotent. That means you can use the `include` of the same class several times in your code.
+
+```puppet
+    include base
+    include base
+```
+
+* The class is declared just once, the first time it was used. Only works without setting parameters via manifest code.
+
+**Notice**: A mix between the declaration with include and class doesn't work and passes to a duplicate declaration error.
+
+### Namespaces
+
+Namespaces are segments that identify the directory and file structure for classes:
+
+| File path                        | Namespace             |
+|----------------------------------|-----------------------|
+| manifests/base.pp                | base                  |
+| manifests/base/ssh.pp            | base::ssh             |
+| manifests/linux/debian/apache.pp | linux::debian::apache |
+
+Classes must correspond to the namespaces in its name.
+
+```puppet
+    class base::ssh {
+      ...
+    }
+
+    include base::ssh
+```
+
+### Autoloading
+
+Classes in module directory ***manifests***:
+
+* Default class named like the module found in ***init.pp***
+* Classes in files matching there names
+  * `module::example` in ***example.pp***
+  * `module::example::complex` in ***example/complex.pp***
+
+Static files in directory ***files***:
+
+* Served by Puppet fileserver as `puppet:///modules/modulename/filename`
+
+```puppet
+    file { '/etc/motd':
+      ensure => file,
+      source => 'puppet:///modules/base/motd.txt',
+    }
+```
+
+Templates directory in ***templates***:
+
+* Lookup by Puppet template functions like
+  * Embedded Ruby: 'template(modulename/filename.erb)'
+  * Embedded Puppet: 'epp(modulename/filename.epp)'
+
+### Parameter Lookup
+
+* Separation of configuration and data
+* Automatic Lookup of parameters was introduced in Puppet 3
+* Improvements in Puppet 4.9
+* Default is
+  * Hiera, a hierachical lookup
+  * One global configuration
+
+## Hiera
+
+* Hierarchy of lookups is configurable
+  * Hierarchy level can be fix or use variables
+  * Hiera 4 was never released as stable, replaced in Puppet 4.9
+  * Environment and module configuration uses Hiera 5
+* Different backends are avaiable
+  * YAML/JSON - default
+  * EYAML - YAML with encrypted fields
+  * MySQL/PostgreSQL - Database lookup
+  * LDAP and more
+
+```yaml
+    ---
+    version: 5
+    defaults:
+      # The default value for "datadir" is "data" under the same directory as the hiera.yaml
+      # file (this file)
+      # When specifying a datadir, make sure the directory exists.
+      # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
+      # datadir: data
+      # data_hash: yaml_data
+    hierarchy:
+      - name: "Per-node data (yaml version)"
+        path: "nodes/%{::trusted.certname}.yaml"
+      - name: "Other YAML hierarchy levels"
+        paths:
+          - "common.yaml"
+```

@@ -43,7 +43,7 @@ TODO
 TODO
 
 
-## Factor
+## Facter
 
 * Facter returns key value pairs named facts
 * It is used by Puppet to gather information about the node
