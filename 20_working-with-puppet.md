@@ -301,7 +301,7 @@ Classes offering a way of grouping resources together and assigning data.
 To specify the contents and behavior of a class. Defining a class doesn't automatically include it in a configuration; it simply makes it available to be declared.
 
 ```puppet
-    class base(
+    class base (
       Boolean               $motd      = true,
       Stdlib::Absolutepath  $motd_file = '/etc/motd',
     ) {

@@ -133,15 +133,15 @@ More commonly used to declare a sequence between different resources.
 
 #### Implicit
 
-![Implicit dependencies](implicit_dependencies.png)
+![Implicit dependencies](../images/implicit_dependencies.png)
 
 #### Implicit dependencies of `user`
 
-![Implicit dependencies of user](implicit_dependencies_user.png)
+![Implicit dependencies of user](../images/implicit_dependencies_user.png)
 
 #### Implicit dependencies of `exec`
 
-![Implicit dependencies of user](implicit_dependencies_exec.png)
+![Implicit dependencies of user](../images/implicit_dependencies_exec.png)
 
 #### Explicit
 
@@ -151,13 +151,13 @@ More commonly used to declare a sequence between different resources.
   * require - referenced resource will be applied first
   * before - apply this resource before the reference
 
-![](explicit_dependencies_ordering.png)
+![](../images/explicit_dependencies_ordering.png)
 
 * Refresh Events:
   * subscribe - if reference is changed refresh this resource
   * notify - if this resource is changed refresh the reference
 
-![](explicit_dependencies_refresh.png)
+![](../images/explicit_dependencies_refresh.png)
 
 #### Dependency Chains
 
@@ -427,7 +427,7 @@ Array item and hash value
    }
 ```
 
-#### Unless Staement
+#### Unless Statement
 
 * Reversed if statement
 * No elsif clause possible

@@ -1,4 +1,4 @@
-# Git beginners guide
+# Git Beginners Guide
 
 Git is a distributed version control system that tracks versions of files.
 
@@ -19,6 +19,16 @@ Git is a distributed version control system that tracks versions of files.
 | git add, rm, mv, commit      | transfer change to git                |
 | git branch, checkout, switch | manages branches                      |
 | git push, rebase, merge      | communication the remote repositories |
+
+## Base Config
+
+Who you are and how you can be reached:
+
+* git config --global user.name 'sudent\<N\>'
+* git config --global user.email 'sudent\<N\>@domain.tld'
+* git config --global push.default simple
+
+Configuration is stored in `~/.gitconfig`.
 
 ## Workflow
 
@@ -143,3 +153,13 @@ To git@github.com:voxpupuli/puppet-icinga2.git
  - [deleted]         lbetz/fix-433
 ✔ ~/puppet-icinga2 [main|✔]
 ```
+
+**Practice**:
+* Extend your motd template with a parameter for a message
+* Add a parameter to profile:base for that message and pass to the template
+* Set a message in the node section of your hiera data
+* Test your code changes locally with `puppet apply`
+* Create a git branch `student\<N\>/message`, commit your changes and push the branch
+* Do a puppet agent run `puppet agent -t --environment student\<N\>_message`
+* After success, merge the branch into `student\<N\>` and push it
+* Do not forget to cleanup and remove the local an remote branch `student\<N\>/message`
