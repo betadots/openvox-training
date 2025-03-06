@@ -374,6 +374,15 @@ More commonly used to declare a sequence between different resources.
 
 ![Explicit dependencies with refreshing](images/explicit_dependencies_refresh.png)
 
+**Practice**:
+* Write a simple profile class for nginx consisting of
+  * package `nginx`
+  * config file `/etc/nginx/nginx.conf
+  * and service `nginx`
+**Tip**: copy the config file from a installation you did and remove the package, remeber the `puppet resource` command.
+
+**Bonus**: Use a template instead of a static config file with at least a class parameter.
+
 ### Dependency Chains
 
 * Alternative syntax for explicit dependency
@@ -381,6 +390,8 @@ More commonly used to declare a sequence between different resources.
 * Simple Ordering:
   * before: Package['openssh-server'] -> File['sshd_config']
   * require: Package['openssh-server'] <- File['sshd_config']
+* Add the new class to yout role `webserver`
+
 * Refresh Events:
   * notify: File['sshd_config'] ~> Service['sshd']
   * subscribe: File['sshd_config'] <~ Service['sshd']
@@ -398,7 +409,7 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 
 ## Iterations
 
- Puppet comes with some iteration functions
+ Puppet comes with some lambdas to do loops and itertations
   * each - repeat a code block for each object
   * slice - repeat a code block a given number of times
   * filter - remove non-matching elements
@@ -416,3 +427,58 @@ Metaparameters are attributes that work with any resource type. With metaparamet
       }
     }
 ```
+
+### Defined Resources
+
+* Very similar to parameterized classes
+* But can be used multiple times
+
+#### Definition
+
+```puppet
+    define apache::vhost (
+       $docroot,
+       $port       = '80',
+       $priority   = '10',
+       $options    = 'Indexes MultiViews',
+       $vhost_name = $title,
+       $servername = $title,
+    ) {
+      file { "/etc/httpd/conf.d/${title}.conf":
+        ensure  => file,
+        owner   => 'apache',
+        group   => 'apache',
+        mode    => '0644',
+        content => template('apache/vhost.conf.erb'),
+        notify  => Service['httpd'],
+      }
+    }
+```
+
+#### Declaration
+
+* Declared like every other resource
+
+```puppet
+    type { title: }
+```
+
+* Using hash to declare multiple defined resources
+
+```puppet
+    $resources_hash.each |String $name, Name $resource| {
+      type {
+        default:
+          * => $defaults_hash;
+        $name:
+          * => $resource;
+        }
+      }
+```
+
+**Practice**:
+* Extend your class `profile::base` with a parameter to manage many users
+* Parameter should be of type hash.
+* Write a defined resource `profile::user` for that case
+* Add a optional parameter for keys, use resource type `ssh_authorized_keys`
+
