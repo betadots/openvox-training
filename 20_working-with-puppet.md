@@ -74,6 +74,8 @@ We will now start with only one environment by working in one directory and the 
 * Use resource notify to display any text you want
 * Run a `puppet apply` on manifest/site.pp
 
+A sample solution can be found [here](./solutions/30_classification.md).
+
 ### External Node Classifier
 
 * External Node Classifier (ENC) is an alternative to site.pp
@@ -111,11 +113,13 @@ We will now start with only one environment by working in one directory and the 
 
 **Practice**:
 
-* Assign a variable with any value outside your node decrations in your site.pp
+* Assign a variable with any value outside your node decrations in your `manifests/site.pp`
 * Use this variable as title in your `notify` resource
 * Run `puppet apply` on your `manifests/site.pp`
 * Now add the same variable inside your node declaration and assign a differnt value
 * Rerun `puppet apply` and compare the results
+
+A sample solution can be found [here](./solutions/40_variables.md).
 
 ### Access to Variables in differnt scopes
 
@@ -136,8 +140,11 @@ Qualified name accesses scope defined by namespace
 ```
 
 **Practice**:
+
 * Replace again the title of your `notify` and use `$::motd_file`
 * Rerun `puppet apply`
+
+A sample solution can be found [here](./solutions/44_variables.md).
 
 ### Data Types
 
@@ -194,7 +201,7 @@ Qualified name accesses scope defined by namespace
     $trusted['certname']
 ```
 
-**Notice**: $trusted is empty during a `puppet apply` if the node has no certificate!
+**Notice**: `$trusted` is empty during a `puppet apply` if the node has no certificate!
 
 
 ## Modules
@@ -234,11 +241,14 @@ The GitHub repositories can also be used directly for the following.
   * Keep it simple
 
 **Practice**:
+
 * Importent: Change into your puppet environment directory
 * Search the forge for a module `motd`
 * Use commandline tool `puppet module` to insatll `motd` from *puppetlabs*
 * Use `puppet module install` to download and install the module motd into your `./modules` directory
 * Check the content of your `./modules` directory
+
+A sample solution can be found [here](./solutions/50_forge.md).
 
 ### Structure of Modules
 

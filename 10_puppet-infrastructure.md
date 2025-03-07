@@ -86,6 +86,17 @@ To get a special value of the structured data, use for example `facter timezone`
     10.00 GiB
 ```
 
+**Practice**:
+* Log in to your student workstation
+* Take a look at the issue of facter at your leisure
+* Determine specific individual values, e.g.
+  * os.family or os.release
+  * networking or networking.ip
+  * partitions
+
+A sample solution can be found [here](./solutions/10_puppet_infrastructure.md).
+
+
 ## Puppet Agent
 
 * Agent runs as service on all managed nodes
@@ -197,7 +208,14 @@ tallable upgradeable versionable virtual_packages*
 
 You get something similar to a man-page also with the `puppet describe` command!
 
+**Practice**:
+* Check current state of resource `chronyd` of type service
+* Install package `vim-enhanced` if it is not already installed
+* Add user `kermit` and remove him again
+  * Use `puppet describe` to get more information about type `user`
+  * Test the behavior with `managehome=true`
 
+A sample solution can be found [here](./solutions/20_puppet_resource.md).
 ## Puppet Server
 
 * The server runs on a central machine
