@@ -244,7 +244,6 @@ The GitHub repositories can also be used directly for the following.
 
 * Importent: Change into your puppet environment directory
 * Search the forge for a module `motd`
-* Use commandline tool `puppet module` to insatll `motd` from *puppetlabs*
 * Use `puppet module install` to download and install the module motd into your `./modules` directory
 * Check the content of your `./modules` directory
 
@@ -294,11 +293,14 @@ mod 'icinga2',
 ```
 
 **Practice**:
+
 * Create a `Puppetfile` in your environment directory
 * Add module `puppetlabs/motd` and its dependencies to your `Puppetfile`
 * Remove all directores from directory `./modules/` via `rm -rf modules/*`
 * Now execute `/opt/puppetlabs/bolt/bin/r10k puppetfile install -v` to reinstall the desired modules
 * Check the content of the `./modules/` directory
+
+A sample solution can be found [here](./solutions/54_puppetfile.md).
 
 
 ## Classes
@@ -377,10 +379,10 @@ Classes must correspond to the namespaces in its name.
 
 Classes in module directory ***manifests***:
 
-* Default class named like the module found in ***init.pp***
+* Default class named like the module found in `init.pp`
 * Classes in files matching there names
-  * `module::example` in ***example.pp***
-  * `module::example::complex` in ***example/complex.pp***
+  * `module::example` in `example.pp`
+  * `module::example::complex` in `example/complex.pp`
 
 Static files in directory ***files***:
 
@@ -400,9 +402,12 @@ Templates directory in ***templates***:
   * Embedded Puppet: 'epp(modulename/filename.epp)'
 
 **Practice**:
+
 * Examine the `puppetlabs/motd` module
 * and use it to manage a message of the day
-* add your code to yout node declaration in *manifests/site.pp*
+* add your code to yout node declaration in `manifests/site.pp`
+
+A sample solution can be found [here](./solutions/60_classes.md).
 
 ### Parameter Lookup
 
@@ -447,17 +452,21 @@ Templates directory in ***templates***:
 **Notice**: Facts can also be used in `hiera.yaml` to control the lookup behavior!
 
 **Practice**:
+
 * Rewrite your node declarition to use only an `include motd` instead of a declaration with `class`
-* Add key `motd::content` with any value to ***data/common.yaml***
+* Add key `motd::content` with any value to `data/common.yaml`
 * Run `puppet aplly` and check the result
-* Add a diffrent value to the same key in ***data/nodes/\<your certname\>.yaml***
+* Add a diffrent value to the same key in `data/nodes/\<your certname\>.yaml`
 * Tip: To get the correct certname use `puppet config print certname`
 * Rerun `puppet apply`
 
+A sample solution can be found [here](./solutions/70_hiera.md).
+
 **Bonus**:
+
 * Add a new layer between *nodes* and *common.yaml* named `operatingsystem data (yaml version)` based on `facts.os.family`
 * Add yaml file for the osfamily of your machine
-* Play around with `motd::content` or other parameter of that class
+
 
 ## Roles-Profiles-Pattern
 
@@ -485,7 +494,7 @@ Templates directory in ***templates***:
     }
 ```
 
-### Profile Modules
+### Profile Module
 
 ![profile modules](images/profile_modules.png)
 
@@ -501,7 +510,7 @@ Templates directory in ***templates***:
     }
 ```
 
-### Role Modules (Optional)
+### Role Module (Optional)
 
 Optional? Can also be mapped via hiera.
 
@@ -515,13 +524,16 @@ Optional? Can also be mapped via hiera.
 ```
 
 **Practice**:
-* Create a dircetory *site-modules* in your environment
-* Add this one to the `modulepath` in the *environment.conf*
+
+* Create a dircetory `site-modules` in your environment
+* Add this one to the `modulepath` in the `environment.conf`
 * Create a new module `profile` to the new path
 * Add a class `base` to the new module
-* Transfer the declarations from your *site.pp* to the new class
-* and replace the declaration in your *site.pp* with your new class
+* Transfer the declarations from your `site.pp` to the new class
+* and replace the declaration in your `site.pp` with your new class
 * Run `puppet apply`
+
+A sample solution can be found [here](./solutions/80_profile.md).
 
 
 ## Templates
@@ -594,13 +606,17 @@ Simple textfile including some Puppet code:
     <% } -%>
 ```
 
-**Keep in mind**: this is puppet code, access to variables out of scope is possible!
+**Notice**: This is puppet code, access to variables out of scope is possible!
 
 **Practice**:
-* Write a EPP template without parameterization for `motd` in your `profile` module
+
+* Write an EPP template without parameterization for `motd` in your `profile` module
 * Use some facts in your message
 * Reconfigure your hiera data to use the template
 * Run `puppet apply`
 
+A sample solution can be found [here](./solutions/90_templates.md).
+
 **Bonus**:
+
 * Extend then template to output a variable from `profile::base` scope
