@@ -70,16 +70,19 @@ To /root/repo
 ```
 
 **Joint Practice**:
+
 * Change to yout environment directory root
 * Create a git repository `git init`
-* Add a file *.gitignore* with one line: `modules` to explude the modules directory from git
+* Add a file *.gitignore* with lines: `modules` and `*.swp` to explude the modules directory from git
 * Check `git status`
 * Rename the current branch `git branch -m student\<N\>`
-* Create a connection to the remote repository `git remote add origin git@g\<git url\>:control.git`
+* Create a connection to the remote repository `git remote add origin git@\<git url\>:control.git`
 * Add files and directories to your new repository `git add .`
 * Check `git status`
 * Do yout first commit `git commit -m 'Initial commit'`
-* Synchronize the local repository with the remote `git push origin production`
+* Synchronize the local repository with the remote `git push origin student\<N\>`
+
+A sample solution can be found [here](./solutions/100_create_git.md).
 
 
 ## Branches
@@ -155,11 +158,14 @@ To git@github.com:voxpupuli/puppet-icinga2.git
 ```
 
 **Practice**:
-* Extend your motd template with a parameter for a message
-* Add a parameter to profile:base for that message and pass to the template
-* Set a message in the node section of your hiera data
+
+* Install the `chrony` module from VoxPupuli via `Puppetfile` and `r10k`
+* Add a parameter `time_servers` for setting time servers to `profile:base`
+* Pass this parameter to class `chrony` in your `profile::base` class
 * Test your code changes locally with `puppet apply`
-* Create a git branch `student\<N\>/message`, commit your changes and push the branch
-* Do a puppet agent run `puppet agent -t --environment student\<N\>_message`
+* Create a git branch `student\<N\>-time`, commit your changes and push the branch
+* Do a puppet agent run `puppet agent -t --environment student\<N\>-time`
 * After success, merge the branch into `student\<N\>` and push it
-* Do not forget to cleanup and remove the local an remote branch `student\<N\>/message`
+* Do not forget to cleanup and remove the local an remote branch `student\<N\>-message`
+
+A sample solution can be found [here](./solutions/104_remote_git.md).
