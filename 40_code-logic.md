@@ -37,8 +37,15 @@
 ```
 
 **Practice**:
-* Create a custom directory structure in `/opt/myapp`
+
+* Do all changes in a dedicated branch
+* Create a new `profile::myapp` class to manage a custom directory structure in `/opt/myapp`
 * Use several File resources of different types of `directory`, `file` and `link`
+* Add new class to your node declaration
+* Test your code locally and in a dedicated environment with an agent run 
+* Merge and push the changes after all tests were sucessful
+
+A sample solution can be found [here](./solutions/110_defaults.md).
 
 
 ## Conditionals
@@ -140,10 +147,11 @@
 ```
 
 **Practice**:
-* Add parameter `packages` (data type: Array) to your `profile::base`
-* Use this parameter together with a condional to install different packages for diffierent OS families
-* Have also a look at stdlib::ensure_packages
-* Discuss file vs. ensure_packages
+
+* Use a condional to manage `chrony` only on RedHat platforms and `ntp` on Debian.
+* Do also the complete git/puppet workflow
+
+A sample solution can be found [here](./solutions/120_conditionals.md).
 
 
 ## Hiera Lookup Behavior
@@ -199,10 +207,13 @@ lookup_options:
 ```
 
 **Practice**:
-* Add a new layer between nodes and common.yaml named `operatingsystem data (yaml version)` based on facts.os.family
-* Replace the `case` statement in `profile::base` with a simple hiera lookup behavior change
-* Use a node specific, os specific list of packages and a default one is `common.yaml`
-* Choose a merge behavior and explain your decision
+
+* Add a new layer between nodes and common.yaml named `operatingsystem data (yaml version)` based on `facts.os.family`
+* Add a new parameter `packages` to `profile::base` to install some packages
+* Use a node specific, os specific list of packages and a default one in `common.yaml`
+* Do a merge behavior change and explain your decision
+
+A sample solution can be found [here](./solutions/130_lookup_behavior.md).
 
 ### Hiera Data Manager
 
@@ -274,6 +285,7 @@ extension_requests:
 ```
 
 **Practice**:
+
 * Add new layer for role after node specific and before os layer to your `hiera.yaml`
 * Create a `webserver.yaml` for the role with a key `classes` (array) and item `profile::base`
 * Set the merge behavior to `first`
@@ -375,6 +387,7 @@ More commonly used to declare a sequence between different resources.
 ![Explicit dependencies with refreshing](images/explicit_dependencies_refresh.png)
 
 **Practice**:
+
 * Write a simple profile class for nginx consisting of
   * package `nginx`
   * config file `/etc/nginx/nginx.conf
@@ -477,6 +490,7 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 ```
 
 **Practice**:
+
 * Extend your class `profile::base` with a parameter to manage many users
 * Parameter should be of type hash.
 * Write a defined resource `profile::user` for that case
