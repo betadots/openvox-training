@@ -286,12 +286,14 @@ extension_requests:
 
 **Practice**:
 
-* Add new layer for role after node specific and before os layer to your `hiera.yaml`
+* Add new layer for role `trusted.extensions.pp_role` after node specific and before os layer
 * Create a `webserver.yaml` for the role with a key `classes` (array) and item `profile::base`
 * Set the merge behavior to `first`
-* Do the required changes in your `site.pp` read and declare `$trusted['extensions']['pp_role']`
+* Do the required changes in your `site.pp` lookup and declare classes
 * Discuss the merge behavior `first` vs. `unique` for this use case
 * Also discuss how to use `pp_environment` for a staging of your servers and roles
+
+A sample solution can be found [here](./solutions/140_classification.md).
 
 
 ## Ordering
@@ -392,7 +394,10 @@ More commonly used to declare a sequence between different resources.
   * package `nginx`
   * config file `/etc/nginx/nginx.conf
   * and service `nginx`
+
 **Tip**: copy the config file from a installation you did and remove the package, remeber the `puppet resource` command.
+
+A sample solution can be found [here](./solutions/150_ordering.md).
 
 **Bonus**: Use a template instead of a static config file with at least a class parameter.
 
@@ -492,7 +497,12 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 **Practice**:
 
 * Extend your class `profile::base` with a parameter to manage many users
-* Parameter should be of type hash.
+  * Parameter should be of type hash.
 * Write a defined resource `profile::user` for that case
-* Add a optional parameter for keys, use resource type `ssh_authorized_keys`
+  * Add a optional parameter for public_keys, use resource type `ssh_authorized_key`
 
+A sample solution can be found [here](./solutions/160_iteration.md).
+
+**Bonus**:
+
+* Add the option to remove users and their keys again
