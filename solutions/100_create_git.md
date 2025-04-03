@@ -2,7 +2,7 @@
 
 ## Create a Git Repository
 
-* Change to your working environment directory
+* Change to your working working directory
 
 ```bash
     $ cd ~/puppetcode

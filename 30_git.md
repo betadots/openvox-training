@@ -71,7 +71,7 @@ To /root/repo
 
 **Joint Practice**:
 
-* Change to yout environment directory root
+* Change to your working directory
 * Create a git repository `git init`
 * Add a file *.gitignore* with lines: `modules` and `*.swp` to explude the modules directory from git
 * Check `git status`

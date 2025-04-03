@@ -2,7 +2,7 @@
 
 In the following, some concepts are mentioned that will be explained and expanded later.
 
-* A branch holds a certain code state
+* A branch (git) holds a certain code state
 * Each existing branch represents a Puppet environment
 * Puppet agents can execute their runs against a specific environment
 * A Puppet module extends the functionality of Puppet, e.g.
@@ -44,8 +44,7 @@ We will now start with only one environment by working in one directory and the 
 * Only objects not declared in modules
 * Matching
   * Exact match
-  * Regex
-  * Fuzzy name matching via wildcards
+  * Regex, first not best match!
   * Default
 
 ```puppet
@@ -55,12 +54,12 @@ We will now start with only one environment by working in one directory and the 
       include apache
     }
 
-    node /.example.com$/ {
-      include base
+    node /www[0-9]+.example.com$/ {
+      include nginx
     }
 
-    node 'www.example.*' {
-      include nginx
+    node /.example.com$/ {
+      include base
     }
 
     node default {
@@ -131,6 +130,8 @@ Shortname accesses via resolving
 Qualified name accesses scope defined by namespace
 
 * Top Scope
+  * Former syntax to access a top scope variable
+  * Do not use (best practice) the top scope anymore
 ```puppet
     $::motd_file
 ```
@@ -188,9 +189,13 @@ A sample solution can be found [here](./solutions/44_variables.md).
 ### Facts
 
 * All determined facts of a node are available as top scope variables during the compilation of the catalog:
-
 ```puppet
     $facts['os']['family']
+```
+* Since Puppet 8 this produces an error if the key does not exist, to get an `undef` instead use
+```puppet
+    fact('os')
+    fact('os.family')
 ```
 
 **Notice**: Access like `$::kernel` or `$::os['family']` is deprcated and will not be supported in the future.
@@ -242,7 +247,7 @@ The GitHub repositories can also be used directly for the following.
 
 **Practice**:
 
-* Importent: Change into your puppet environment directory
+* Importent: Change into your puppet working directory
 * Search the forge for a module `motd`
 * Use `puppet module install` to download and install the module motd into your `./modules` directory
 * Check the content of your `./modules` directory
@@ -294,7 +299,7 @@ mod 'icinga2',
 
 **Practice**:
 
-* Create a `Puppetfile` in your environment directory
+* Create a `Puppetfile` in your working directory
 * Add module `puppetlabs/motd` and its dependencies to your `Puppetfile`
 * Remove all directores from directory `./modules/` via `rm -rf modules/*`
 * Now execute `/opt/puppetlabs/bolt/bin/r10k puppetfile install -v` to reinstall the desired modules
@@ -428,8 +433,7 @@ A sample solution can be found [here](./solutions/60_classes.md).
 * Different backends are avaiable
   * YAML/JSON - default
   * EYAML - YAML with encrypted fields
-  * MySQL/PostgreSQL - Database lookup
-  * LDAP and more
+  * EYAML-GPG - same but with GPG keys
 
 ```yaml
     ---
@@ -498,13 +502,18 @@ A sample solution can be found [here](./solutions/70_hiera.md).
 
 ![profile modules](images/profile_modules.png)
 
+* Declare resources and classes inside
+* Parameters are welcome
+
 ```puppet
-    class profile::base {
+    class profile::base ( {
+      String[1] $template = 'motd_base.erb',
+    ) {
       include ssh
       include postfix::mta
 
       class { 'motd':
-        template => 'profile/motd_base.erb'
+        template => "profile/${template}"
       }
       ...
     }
@@ -516,6 +525,10 @@ Optional? Can also be mapped via hiera.
 
 ![role modules](images/role_modules.png)
 
+* Only includes profile classes
+* Transfer parameters to prifile classes only via Hiera
+* Parameterization of role classes is not permitted
+
 ```puppet
     class role::webserver::external {
       include profile::base::hardening
@@ -525,7 +538,7 @@ Optional? Can also be mapped via hiera.
 
 **Practice**:
 
-* Create a dircetory `site-modules` in your environment
+* Create a dircetory `site-modules` in your working directory
 * Add this one to the `modulepath` in the `environment.conf`
 * Create a new module `profile` to the new path
 * Add a class `base` to the new module

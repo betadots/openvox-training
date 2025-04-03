@@ -3,6 +3,7 @@
 ## Resource Defaults and Blocks
 
 * Puppet allows you to declare resource defaults
+* Default to the entire namespace, e.g. the entire class
 
 ```puppet
     Type {
@@ -19,6 +20,9 @@
 **Notice**: For directories Puppet promotes a mode default of `0644` to `0755`.
 
 * With Puppet 4 a block based version was introduced
+* Does not contribute to clarity
+* But only applies to the file block itself
+  * Nice to use when there are many resources of the same type to manage
 
 ```puppet
     file {
@@ -64,6 +68,7 @@ A sample solution can be found [here](./solutions/110_defaults.md).
 ### Selectors
 
 * Good for assigning conditional values to variables
+* and for simple non-extensive selection
 
 ```puppet
     $apache_package = $facts['os']['family'] ? {
@@ -158,6 +163,7 @@ A sample solution can be found [here](./solutions/120_conditionals.md).
 
 * By default the lookup returns the first match
 * In addition to the automatic lookup, there is also a function
+* But automatic lookp is to be preferred, as it is significantly faster
 * First paramter is the key
 * Last one the default to set if no key was found
 
@@ -353,7 +359,7 @@ The reference to a class consists of the keyword `Class` and its namespace:
 Can be used to override parameters
 
 ```puppet
-    file { ['/tmp/test', '/root/file.txt']:
+    file { '/root/file.txt':
       ensure  => file,
       owner   => 'root',
       group   => 'root',

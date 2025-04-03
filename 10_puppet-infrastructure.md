@@ -45,45 +45,48 @@ TODO
 
 ## Facter
 
-* Facter returns key value pairs named facts
+* Facter returns (JSON format) key value pairs named facts
 * It is used by Puppet to gather information about the node
-* You can also run it on command line `facter` to list facts
+* You can also run it on command line `puppet facts` to list facts
 
 ```bash
-    aio_agent_version => 7.18.0
-    augeas => {
-      version => "1.12.0"
-    }
-    disks => {
-      vda => {
-        size => "10.00 GiB",
-        size_bytes => 10737418240,
-        vendor => "0x1af4"
+    {
+      aio_agent_version: 7.18.0
+      augeas: {
+        version: "1.12.0"
       }
-    }
-    ...
-    system_uptime => {
-      days => 0,
-      hours => 2,
-      seconds => 8378,
-      uptime => "2:19 hours"
-    }
-    timezone => UTC
-    virtual => kvm
+      disks: {
+        vda: {
+          size: "10.00 GiB",
+          size_bytes: 10737418240,
+          vendor: "0x1af4"
+        }
+      }
+      ...
+      system_uptime: {
+        days: 0,
+        hours: 2,
+        seconds: 8378,
+        uptime: "2:19 hours"
+      }
+      timezone: UTC
+      virtual: kvm
 ```
 
-To get a special value of the structured data, use for example `facter timezone` or `facter disks.vda`.
+To get a special value of the structured data, use for example:
 
 ```bash
-    facter disks.vda
-    {
-      size => "10.00 GiB",
-      size_bytes => 10737418240,
-      vendor => "0x1af4"
-    }
+    $ puppet facts disks.vda --render-as yaml
+    ---
+    disks.vda:
+      size: "10.00 GiB",
+      size_bytes: 10737418240,
+      vendor: "0x1af4"
 
-    facter disks.vda.size
-    10.00 GiB
+    $ puppet facts disks.vda.size
+    {
+      "disks.vda.size": "10.00 GiB"
+    }
 ```
 
 **Practice**:
@@ -94,7 +97,37 @@ To get a special value of the structured data, use for example `facter timezone`
   * networking or networking.ip
   * partitions
 
-A sample solution can be found [here](./solutions/10_puppet_infrastructure.md).
+A sample solution can be found [here](./solutions/10_puppet_facter.md).
+
+### External Facts
+
+Writing your own facts to extend the functionality of facter.
+
+* Locations
+  * /opt/puppetlabs/facter/facts.d/
+  * /etc/puppetlabs/facter/facts.d/
+  * /etc/facter/facts.d/
+  * or remeber later if you reach the chapter about modules
+* simple text file
+
+```bash
+    key1=value1
+    key2=value2
+```
+
+* Every executable that supplies to stdout key-value-pairs as
+  * yaml
+  * json
+* Structured data as output is also pussible with executables
+* use `puppet facts` to catch all facts also the external one, because
+  * old `facter` cli returns core facts only
+  * even if the `-p` option also includes your own written facts
+
+```bash
+    diff <(facter) <(facter -p)
+    447a448
+    > puppetversion => 8.14.0
+```
 
 
 ## Puppet Agent
@@ -119,6 +152,40 @@ A sample solution can be found [here](./solutions/10_puppet_infrastructure.md).
   * Default interval is 30 minutes
 * Cronjob can be used as alternative
 * On demand is also possible
+
+### Configuration
+
+* `/etc/puppetlabs/puppet/puppet.conf` (INI format)
+* Use `puppet config print` shows the running and complete used configuration
+
+```bash
+    $ puppet config print
+    agent_catalog_run_lockfile = /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
+    agent_disabled_lockfile = /opt/puppetlabs/puppet/cache/state/agent_disabled.lock
+    allow_duplicate_certs = false
+    allow_pson_serialization = false
+    always_retry_plugins = true
+    autoflush = true
+    autosign = /etc/puppetlabs/puppet/autosign.conf
+    basemodulepath = /etc/puppetlabs/code/modules:/opt/puppetlabs/puppet/modules
+    ...
+```
+
+* or for only one special option:
+
+```bash
+    $ puppet config print ssldir
+    /etc/puppetlabs/puppet/ssl
+```
+
+* On the same way you can set option with `puppet config set`
+
+**Practice**
+* Check out the current state of `report` that controls the sending of reports
+* Change the behavoir
+* After that take a look in the confiuguration file `puppet.conf`
+
+A sample solution can be found [here](./solutions/15_puppet_config.md).
 
 ### Resources
 
@@ -226,6 +293,10 @@ A sample solution can be found [here](./solutions/20_puppet_resource.md).
 * Forwards reports to report handlers
 * Puppet server runs jRuby (executed in a JVM)
 * Supported on most Linux distributions
+
+### Configuration
+
+In the same way as for the agent. But with an additional section (INI) `server` for server options only.
 
 ### Deploying Code to Puppet Server
 

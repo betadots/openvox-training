@@ -2,7 +2,7 @@
 
 ## Puppetfile
 
-* Create a `Puppetfile` in your environment directory
+* Create a `Puppetfile` in your working directory
 
 ```bash
     $ cd ~/puppetcode

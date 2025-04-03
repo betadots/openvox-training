@@ -2,7 +2,7 @@
 
 ## Puppet Forge
 
-* Importent: Change into your puppet environment directory
+* Importent: Change into your puppet working directory
 
 ```bash
     $ cd ~/puppetcode
