@@ -66,7 +66,7 @@
 * Use a node specific, os specific list of packages and a default one in `common.yaml`
 
 ```bash
-    $ vim data/od/RedHat.yaml
+    $ vim data/os/RedHat.yaml
 ```
 
 ```yaml

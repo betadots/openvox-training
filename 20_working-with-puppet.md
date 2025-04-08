@@ -460,7 +460,7 @@ A sample solution can be found [here](./solutions/60_classes.md).
 * Rewrite your node declarition to use only an `include motd` instead of a declaration with `class`
 * Add key `motd::content` with any value to `data/common.yaml`
 * Run `puppet aplly` and check the result
-* Add a diffrent value to the same key in `data/nodes/\<your certname\>.yaml`
+* Add a diffrent value to the same key in `data/nodes/<your certname>.yaml`
 * Tip: To get the correct certname use `puppet config print certname`
 * Rerun `puppet apply`
 

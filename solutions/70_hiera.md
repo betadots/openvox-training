@@ -23,7 +23,7 @@
     $ puppet apply manifests/site.pp
 ```
 
-* Add a diffrent value to the same key in `data/nodes/\<your certname\>.yaml`
+* Add a diffrent value to the same key in `data/nodes/<your certname>.yaml`
 
 ```bash
     $ mkdir data/nodes
