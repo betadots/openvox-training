@@ -52,8 +52,9 @@
           }
         }
         'debian': {
-          class { 'ntp':
-            servers => $time_servers,
+          class { 'systemd':
+            manage_timesyncd => true,
+            ntp_server       => $time_servers,
           }
         }
         default: {

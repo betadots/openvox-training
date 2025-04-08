@@ -2,7 +2,7 @@
 
 ## Conditionals
 
-* Use a condional to manage `chrony` only on RedHat platforms and `ntp` on Debian.
+* Use a condional to manage time servers with `chrony` only on RedHat platforms and with `systemd` on Debian.
 
 ```bash
     $ cd ~/puppetcode
@@ -15,7 +15,8 @@
     mod 'puppetlabs/stdlib'
     mod 'puppetlabs/registry'
     mod 'puppet/chrony'
-    mod 'puppetlabs/ntp'
+    mod 'puppet/systemd'
+    mod 'puppetlabs/inifile'
 ```
 
 ```bash
@@ -36,8 +37,9 @@
           }
         }
         'debian': {
-          class { 'ntp':
-            servers => $time_servers,
+          class { 'systemd':
+            manage_timesyncd => true,
+            ntp_server       => $time_servers,
           }
         }
         default: {
@@ -46,6 +48,15 @@
       }
       
     }
+```
+
+* Add `time_servers`, e.g. `ptbtime1.ptb.de` to `common.yaml` hiera data file
+
+```yaml
+---
+profile::time_servers:
+  - ptbtime1.ptb.de
+  - ptbtime2.ptb.de
 ```
 
 * Do also the complete git/puppet workflow

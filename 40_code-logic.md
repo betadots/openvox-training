@@ -153,7 +153,8 @@ A sample solution can be found [here](./solutions/110_defaults.md).
 
 **Practice**:
 
-* Use a condional to manage `chrony` only on RedHat platforms and `ntp` on Debian.
+* Use a condional to manage time servers with `chrony` only on RedHat platforms and with `systemd` on Debian.
+* Add `time_servers`, e.g. `ptbtime1.ptb.de` to `common.yaml` hiera data file
 * Do also the complete git/puppet workflow
 
 A sample solution can be found [here](./solutions/120_conditionals.md).
