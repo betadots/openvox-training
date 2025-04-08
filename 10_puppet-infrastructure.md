@@ -20,6 +20,19 @@
 
 ## Impementations
 
+### Puppet Core
+
+* Emerged from Puppet Open Source
+* Certified Puppet builds and guaranteed SLAs from vendor
+* Developers or free users licence (EULA) available
+* Chargeable licenses for 25 nodes or more
+
+### OpenVox
+
+* Open Source [community](https://github.com/openvoxproject) projekt forked from Puppet Open Source
+* Started in the end of 2024
+* Also offers all components as container images
+
 ### Puppet Enterprise
 
 * Packaging for additional platforms including additional components
@@ -33,15 +46,6 @@
 * Supported Modules
 * Automated Provisioning for some platforms
 * Vendor support and service
-
-### Puppet FOSS
-
-TODO
-
-### OpenVox
-
-TODO
-
 
 ## Facter
 
