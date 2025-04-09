@@ -29,4 +29,4 @@ Grafana is an open source application for the graphical representation of data f
   * allow all outgoing traffic and incoming ssh and icmp
   * additinal only for Grafana hosts allow incomming http
 
-A sample solution can be found [here](./solutions/150_profiles.md).
+A sample solution can be found [here](./solutions/170_grafana.md).
