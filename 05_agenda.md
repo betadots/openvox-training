@@ -10,7 +10,7 @@
   * Classification and the control repository
   * Allmost everything about variables, vacts, modules and classes
   * The use of Hiera and how to seperate code and data
-  * Template and functions
+  * Templates and functions
 
 ## Day 2
 
