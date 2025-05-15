@@ -53,44 +53,49 @@
 * It is used by Puppet to gather information about the node
 * You can also run it on command line `puppet facts` to list facts
 
-```bash
-    {
-      aio_agent_version: 7.18.0
-      augeas: {
-        version: "1.12.0"
-      }
-      disks: {
-        vda: {
-          size: "10.00 GiB",
-          size_bytes: 10737418240,
-          vendor: "0x1af4"
-        }
-      }
-      ...
-      system_uptime: {
-        days: 0,
-        hours: 2,
-        seconds: 8378,
-        uptime: "2:19 hours"
-      }
-      timezone: UTC
-      virtual: kvm
+(shortened output)
+
+```json
+{
+  "augeas": {
+    "version": "1.14.1"
+  },
+  "borgbackup": {
+    "version": "1.4.1"
+  },
+  "disks": {
+    "nvme0n1": {
+      "model": "WDS100T3X0C-00SJG0",
+      "serial": "2109D4449306",
+      "size": "931.51 GiB",
+      "size_bytes": 1000204886016,
+      "type": "ssd",
+      "wwn": "eui.e8238fa6bf530001001b444a460cef06"
+    }
+  },
+  "dmi": {
+    "bios": {
+      "release_date": "11/13/2024",
+      "vendor": "INSYDE Corp.",
+      "version": "03.05"
+    }
+}
 ```
 
 To get a special value of the structured data, use for example:
 
 ```bash
-    $ puppet facts disks.vda --render-as yaml
-    ---
-    disks.vda:
-      size: "10.00 GiB",
-      size_bytes: 10737418240,
-      vendor: "0x1af4"
+$ puppet facts disks.vda --render-as yaml
+---
+disks.vda:
+  size: "10.00 GiB",
+  size_bytes: 10737418240,
+  vendor: "0x1af4"
 
-    $ puppet facts disks.vda.size
-    {
-      "disks.vda.size": "10.00 GiB"
-    }
+$ puppet facts disks.vda.size
+{
+  "disks.vda.size": "10.00 GiB"
+}
 ```
 
 **Practice**:
@@ -128,9 +133,9 @@ Writing your own facts to extend the functionality of facter.
   * even if the `-p` option also includes your own written facts
 
 ```bash
-    diff <(facter) <(facter -p)
-    447a448
-    > puppetversion => 8.14.0
+diff <(facter) <(facter -p)
+447a448
+> puppetversion => 8.14.0
 ```
 
 
