@@ -34,7 +34,7 @@ Configuration is stored in `~/.gitconfig`.
 
 ![Git workflow and working with snapshots](images/git_snapshots.png)
 
-```bash
+```console
 $ git clone git@github.com:voxpupuli/puppet-icinga2.git
 $ cd puppet-icinga2
 ✔ ~/puppet-icinga2 [main|✔]
@@ -104,7 +104,7 @@ A sample solution can be found [here](./solutions/100_create_git.md).
 
 ![Working with branches](images/git_branches.png)
 
-```bash
+```console
 ✔ ~/puppet-icinga2 [main|✔]
 $ git checkout -b lbetz/fix-433
 Switched to a new branch 'lbetz/fix-433'
@@ -141,7 +141,7 @@ Deleted branch lbetz/fix-433 (was 29907a5).
   * git branch -D \<branch name> (non synchronized)
   * git push \<remote name> --delete \<branch name>
 
-```bash
+```console
 $ git push origin lbetz/fix-433
 Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
