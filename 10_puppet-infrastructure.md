@@ -204,7 +204,7 @@ With Puppet, everything that is managed is a resource or is traced back to one o
 ```
 
 * Different types of resources have a differnt set of attributes
-* But there are attributes, the so-called **meta attributes**, which exist for every resource type 
+* But there are attributes, the so-called **meta attributes**, which exist for every resource type
 * With **defined resources** you can define your own types to extend Puppet
 
 ### Example Managing User
