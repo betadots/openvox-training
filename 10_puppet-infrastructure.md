@@ -196,11 +196,11 @@ A sample solution can be found [here](./solutions/15_puppet_config.md).
 With Puppet, everything that is managed is a resource or is traced back to one or more.
 
 ```puppet
-    type { 'title':
-      attribute1 => 'value1',
-      ...
-      attributeN => 'valueN',
-    }
+type { 'title':
+  attribute1 => 'value1',
+  ...
+  attributeN => 'valueN',
+}
 ```
 
 * Different types of resources have a differnt set of attributes
