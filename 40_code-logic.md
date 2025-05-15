@@ -6,15 +6,15 @@
 * Default to the entire namespace, e.g. the entire class
 
 ```puppet
-    Type {
-      attribute => 'value',
-    }
+Type {
+  attribute => 'value',
+}
 
-    File {
-      owner => 'root',
-      group => 'root',
-      mode  => '0644',
-    }
+File {
+  owner => 'root',
+  group => 'root',
+  mode  => '0644',
+}
 ```
 
 **Notice**: For directories Puppet promotes a mode default of `0644` to `0755`.
@@ -25,19 +25,19 @@
   * Nice to use when there are many resources of the same type to manage
 
 ```puppet
-    file {
-      default:
-        mode   => '0600',
-        owner  => 'root',
-        group  => 'root',
-        ensure => file,
-      ;
-      '/etc/ssh_host_key':
-      ;
-      '/etc/ssh_host_dsa_key.pub':
-        mode => '0644',
-      ;
-    }
+file {
+  default:
+    mode   => '0600',
+    owner  => 'root',
+    group  => 'root',
+    ensure => file,
+  ;
+  '/etc/ssh_host_key':
+  ;
+  '/etc/ssh_host_dsa_key.pub':
+    mode => '0644',
+  ;
+}
 ```
 
 **Practice**:
@@ -46,7 +46,7 @@
 * Create a new `profile::myapp` class to manage a custom directory structure in `/opt/myapp`
 * Use several File resources of different types of `directory`, `file` and `link`
 * Add new class to your node declaration
-* Test your code locally and in a dedicated environment with an agent run 
+* Test your code locally and in a dedicated environment with an agent run
 * Merge and push the changes after all tests were sucessful
 
 A sample solution can be found [here](./solutions/110_defaults.md).
@@ -71,15 +71,15 @@ A sample solution can be found [here](./solutions/110_defaults.md).
 * and for simple non-extensive selection
 
 ```puppet
-    $apache_package = $facts['os']['family'] ? {
-      'RedHat' => 'httpd',
-      default  => 'apache2',
-    }
+$apache_package = $facts['os']['family'] ? {
+  'RedHat' => 'httpd',
+  default  => 'apache2',
+}
 
-    package { 'apache':
-      ensure => installed,
-      name   => $apache_package,
-    }
+package { 'apache':
+  ensure => installed,
+  name   => $apache_package,
+}
 ```
 
 ### Case Statement
@@ -89,16 +89,16 @@ A sample solution can be found [here](./solutions/110_defaults.md).
   * Choosing different branches of code
 
 ```puppet
-     case $facts['os']['family'] {
-      'RedHat': {
-        $apache_package = 'httpd'
-        $apache_confdir = '/etc/httpd'
-      }
-      default: {
-        $apache_package = 'apache2'
-        $apache_confdir = '/etc/apache2'
-      }
-    }
+case $facts['os']['family'] {
+  'RedHat': {
+    $apache_package = 'httpd'
+    $apache_confdir = '/etc/httpd'
+  }
+  default: {
+    $apache_package = 'apache2'
+    $apache_confdir = '/etc/apache2'
+  }
+}
 ```
 
 ### If Statement
@@ -111,27 +111,27 @@ A sample solution can be found [here](./solutions/110_defaults.md).
   * chain of expressions
 
 ```puppet
-    if $ensure == 'present' or $ensure == 'installed' {
-      package { 'telnet':
-        ensure => present,
-      }
-    } elsif $ensure =~ /^(absent|purged)$/ {
-      package { 'telnet':
-        ensure => purged,
-      }
-    } else {
-      fail("${ensure} is not valid")
-    }
+if $ensure == 'present' or $ensure == 'installed' {
+  package { 'telnet':
+    ensure => present,
+  }
+} elsif $ensure =~ /^(absent|purged)$/ {
+  package { 'telnet':
+    ensure => purged,
+  }
+} else {
+  fail("${ensure} is not valid")
+}
 ```
 
 * Can also be used to assign variables directly
 
 ```puppet
-   $_real_package_name = if $facts['os']['family'] == 'RedHat' {
-     'httpd'
-   } else {
-     'apache2'
-   }
+$_real_package_name = if $facts['os']['family'] == 'RedHat' {
+  'httpd'
+} else {
+  'apache2'
+}
 ```
 
 ### Unless Statement
@@ -140,15 +140,15 @@ A sample solution can be found [here](./solutions/110_defaults.md).
 * No elsif clause possible
 
 ```puppet
-    unless $ensure =~ /^(absent|purged)$/ {
-      package { 'telnet':
-        ensure => present,
-      }
-    } else {
-      package { 'telnet':
-        ensure => purged,
-      }
-    }
+unless $ensure =~ /^(absent|purged)$/ {
+  package { 'telnet':
+    ensure => present,
+  }
+} else {
+  package { 'telnet':
+    ensure => purged,
+  }
+}
 ```
 
 **Practice**:
@@ -245,7 +245,7 @@ node default {
 ```
 
 * Remember: There is a way to store and read trused information in and from the agent certificate
-* Have a look at your certificate in `/etc/puppetlabs/puppet/ssl/certs` 
+* Have a look at your certificate in `/etc/puppetlabs/puppet/ssl/certs`
 
 ```bash
 openssl x509 -in \<path to cert \> -noout -text
@@ -254,24 +254,24 @@ openssl x509 -in \<path to cert \> -noout -text
 * Section `X509v3 extensions`
 
 ```text
-            X509v3 Subject Key Identifier:
-                EE:AD:98:3D:6D:B1:AE:43:EB:56:47:38:15:87:EC:CC:B0:7E:BD:C8
-            1.3.6.1.4.1.34380.1.1.13:
-                ..webserver
-            1.3.6.1.4.1.34380.1.1.12:
-                ..prod
-            1.3.6.1.4.1.34380.1.1.20:
-                ..hetzner
-            1.3.6.1.4.1.34380.1.1.19:
-                ..fsn1-dc14
-            1.3.6.1.4.1.34380.1.1.8:
-                ..training
-            1.3.6.1.4.1.34380.1.1.21:
-                ..lbetz-public.betadots.training
-            1.3.6.1.4.1.34380.1.1.2:
-                ..60288402
-            1.3.6.1.4.1.34380.1.1.18:
-                .
+X509v3 Subject Key Identifier:
+    EE:AD:98:3D:6D:B1:AE:43:EB:56:47:38:15:87:EC:CC:B0:7E:BD:C8
+1.3.6.1.4.1.34380.1.1.13:
+    ..webserver
+1.3.6.1.4.1.34380.1.1.12:
+    ..prod
+1.3.6.1.4.1.34380.1.1.20:
+    ..hetzner
+1.3.6.1.4.1.34380.1.1.19:
+    ..fsn1-dc14
+1.3.6.1.4.1.34380.1.1.8:
+    ..training
+1.3.6.1.4.1.34380.1.1.21:
+    ..lbetz-public.betadots.training
+1.3.6.1.4.1.34380.1.1.2:
+    ..60288402
+1.3.6.1.4.1.34380.1.1.18:
+    .
 ```
 
 * `/etc/puppetlabs/puppet/csr_attributes.yaml` configures the certificate request
@@ -302,7 +302,6 @@ extension_requests:
 
 A sample solution can be found [here](./solutions/140_classification.md).
 
-
 ## Ordering
 
 * Default order depends on <ins>order of declaration</ins> and implicit dependencies
@@ -330,11 +329,11 @@ A sample solution can be found [here](./solutions/140_classification.md).
 * Use full path or provide path as attribute
 
 ```puppet
-   exec { 'command':
-     path        => '/usr/sbin/:/sbin/',
-     refreshonly => true,
-     timeout     => 60,
-   }
+exec { 'command':
+  path        => '/usr/sbin/:/sbin/',
+  refreshonly => true,
+  timeout     => 60,
+}
 ```
 
 ![Implicit dependencies of user](images/implicit_dependencies_exec.png)
@@ -344,34 +343,34 @@ A sample solution can be found [here](./solutions/140_classification.md).
 Allows to reference other managed resources
 
 ```puppet
-    Type['title']
+Type['title']
 
-    Service['sshd']
+Service['sshd']
 ```
 
 The reference to a class consists of the keyword `Class` and its namespace:
 
 ```puppet
-    Class['class namespace']
+Class['class namespace']
 
-    Class['base::ssh']
+Class['base::ssh']
 ```
 
 Can be used to override parameters
 
 ```puppet
-    file { '/root/file.txt':
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      content => 'some content!',
-    }
+file { '/root/file.txt':
+  ensure  => file,
+  owner   => 'root',
+  group   => 'root',
+  mode    => '0644',
+  content => 'some content!',
+}
 
-    File['/root/file.txt'] {
-      mode    => '0640',
-      content => 'Some different content.',
-    }
+File['/root/file.txt'] {
+  mode    => '0640',
+  content => 'Some different content.',
+}
 ```
 
 **Note**: Using this sparingly to avoid confusion when everything is declared.
@@ -443,14 +442,14 @@ Metaparameters are attributes that work with any resource type. With metaparamet
   * with - create a private code block (no real iteration)
 
 ```puppet
-    $binaries = ['facter', 'puppet', 'r10k']
+$binaries = ['facter', 'puppet', 'r10k']
 
-    $binaries.each |String $binary| {
-      file {"/usr/bin/${binary}":
-        ensure => link,
-        target => "/opt/puppetlabs/bin/${binary}",
-      }
-    }
+$binaries.each |String $binary| {
+  file {"/usr/bin/${binary}":
+    ensure => link,
+    target => "/opt/puppetlabs/bin/${binary}",
+  }
+}
 ```
 
 ### Defined Resources
@@ -461,23 +460,23 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 #### Definition
 
 ```puppet
-    define apache::vhost (
-       $docroot,
-       $port       = '80',
-       $priority   = '10',
-       $options    = 'Indexes MultiViews',
-       $vhost_name = $title,
-       $servername = $title,
-    ) {
-      file { "/etc/httpd/conf.d/${title}.conf":
-        ensure  => file,
-        owner   => 'apache',
-        group   => 'apache',
-        mode    => '0644',
-        content => template('apache/vhost.conf.erb'),
-        notify  => Service['httpd'],
-      }
-    }
+define apache::vhost (
+   $docroot,
+   $port       = '80',
+   $priority   = '10',
+   $options    = 'Indexes MultiViews',
+   $vhost_name = $title,
+   $servername = $title,
+) {
+  file { "/etc/httpd/conf.d/${title}.conf":
+    ensure  => file,
+    owner   => 'apache',
+    group   => 'apache',
+    mode    => '0644',
+    content => template('apache/vhost.conf.erb'),
+    notify  => Service['httpd'],
+  }
+}
 ```
 
 #### Declaration
@@ -491,14 +490,14 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 * Using hash to declare multiple defined resources
 
 ```puppet
-    $resources_hash.each |String $name, Name $resource| {
-      type {
-        default:
-          * => $defaults_hash;
-        $name:
-          * => $resource;
-        }
-      }
+$resources_hash.each |String $name, Name $resource| {
+  type {
+    default:
+      * => $defaults_hash;
+    $name:
+      * => $resource;
+  }
+}
 ```
 
 **Practice**:
