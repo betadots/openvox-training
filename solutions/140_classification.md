@@ -71,7 +71,7 @@
 
 ```puppet
 node default {
-  lookup('classes', Array[String], 'first').include
+  lookup('classes', Array[String], 'unique').include
 }
 ```
 
