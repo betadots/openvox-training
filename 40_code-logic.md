@@ -224,7 +224,29 @@ A sample solution can be found [here](./solutions/130_lookup_behavior.md).
 
 ### Hiera Data Manager
 
-TODO
+The Hiera Data Manager ([HDM](https://github.com/betadots/hdm)) is a graphical user interface for displaying the evaluated keys for each node and environment.
+
+* Easy to setup via container
+
+![HDM](images/hdm.png)
+
+* Smart proxy for integration in [foreman](https://github.com/betadots/foreman_hdm)
+* Authentication via
+  * local SQLite database
+  * LDAP connection to a Server, e.g. Microsoft Active Directory
+  * Admin only manage additional user accounts, no data
+* Autorization: All or nothing, no RBAC (Roll Based Access Controll)
+
+![HDM](images/hdm_auth.png)
+
+* Shows where values of the key come from
+
+![HDM](images/hdm_value.png)
+
+* Merges values if a special behavior for their keys are given
+
+![HDM](images/hdm_unique-1.png)
+![HDM](images/hdm_unique-2.png)
 
 ### Classification
 
@@ -240,7 +262,7 @@ classes:
 
 ```puppet
 node default {
-  lookup('classes', Array[String], 'first').include
+  lookup('classes', Array[String], 'unique').include
 }
 ```
 
