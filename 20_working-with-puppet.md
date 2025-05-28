@@ -31,9 +31,9 @@ We will now start with only one environment by working in one directory and the 
   * Server can override it
 * Default environment: production
 
-```bash
-    $ ls -l /etc/puppetlabs/code/environments/production
-    data  environment.conf  hiera.yaml  manifests  modules Puppetfile
+```console
+$ ls -l /etc/puppetlabs/code/environments/production
+data  environment.conf  hiera.yaml  manifests  modules Puppetfile
 ```
 
 ## Classification
@@ -48,23 +48,23 @@ We will now start with only one environment by working in one directory and the 
   * Default
 
 ```puppet
-    # environments/production/manifests/site.pp
+# environments/production/manifests/site.pp
 
-    node 'www.example.com' {
-      include apache
-    }
+node 'www.example.com' {
+  include apache
+}
 
-    node /www[0-9]+.example.com$/ {
-      include nginx
-    }
+node /www[0-9]+.example.com$/ {
+  include nginx
+}
 
-    node /.example.com$/ {
-      include base
-    }
+node /.example.com$/ {
+  include base
+}
 
-    node default {
-      notify { 'Node not configured': }
-    }
+node default {
+  notify { 'Node not configured': }
+}
 ```
 
 **Practice**:
@@ -89,9 +89,9 @@ A sample solution can be found [here](./solutions/30_classification.md).
 **Syntax**:
 
 ```puppet
-    $variable = 'value'
+$variable = 'value'
 
-    $motd_file = '/etc/motd'
+$motd_file = '/etc/motd'
 ```
 
 * Can be used in resource attributes, expression or functions
@@ -107,7 +107,7 @@ A sample solution can be found [here](./solutions/30_classification.md).
 **Interpolation**
 
 ```puppet
-    $motd_file = "${conf_dir}/motd}"
+$motd_file = "${conf_dir}/motd"
 ```
 
 **Practice**:
@@ -123,8 +123,9 @@ A sample solution can be found [here](./solutions/40_variables.md).
 ### Access to Variables in differnt scopes
 
 Shortname accesses via resolving
+
 ```puppet
-    $httpd_confdir
+$httpd_confdir
 ```
 
 Qualified name accesses scope defined by namespace
@@ -132,12 +133,15 @@ Qualified name accesses scope defined by namespace
 * Top Scope
   * Former syntax to access a top scope variable
   * Do not use (best practice) the top scope anymore
+
 ```puppet
-    $::motd_file
+$::motd_file
 ```
+
 * Out-of-Scope
+
 ```puppet
-    $apache:mod::status::extended_status
+$apache:mod::status::extended_status
 ```
 
 **Practice**:
@@ -161,10 +165,10 @@ A sample solution can be found [here](./solutions/44_variables.md).
   * Default
 
 ```puppet
-    $num  = 4711
-    $bool = true
-    $arr  = ['item1', 4711]
-    $hsh  = { key1 => 'value1', key2 => 4711 }
+$num  = 4711
+$bool = true
+$arr  = ['item1', 4711]
+$hsh  = { key1 => 'value1', key2 => 4711 }
 ```
 
 * Abstract Data Types
@@ -174,28 +178,31 @@ A sample solution can be found [here](./solutions/44_variables.md).
 ### Accessing variables
 
 ```puppet
-    $scalar
+$scalar
 
-    $arr[0|
-    $arr[1][2|
+$arr[0|
+$arr[1][2|
 
-    $hsh['key']
-    $hsh['key1']['key2']
+$hsh['key']
+$hsh['key1']['key2']
 
-    $arr[0]['key']
-    $hsh['key'][5]
+$arr[0]['key']
+$hsh['key'][5]
 ```
 
 ### Facts
 
 * All determined facts of a node are available as top scope variables during the compilation of the catalog:
+
 ```puppet
-    $facts['os']['family']
+$facts['os']['family']
 ```
+
 * Since Puppet 8 this produces an error if the key does not exist, to get an `undef` instead use
+
 ```puppet
-    fact('os')
-    fact('os.family')
+fact('os')
+fact('os.family')
 ```
 
 **Notice**: Access like `$::kernel` or `$::os['family']` is deprcated and will not be supported in the future.
@@ -203,11 +210,10 @@ A sample solution can be found [here](./solutions/44_variables.md).
 * All trusted information such as certname or all other properties from the certifikate are also avaiable':
 
 ```puppet
-    $trusted['certname']
+$trusted['certname']
 ```
 
 **Notice**: `$trusted` is empty during a `puppet apply` if the node has no certificate!
-
 
 ## Modules
 
@@ -318,16 +324,16 @@ Classes offering a way of grouping resources together and assigning data.
 To specify the contents and behavior of a class. Defining a class doesn't automatically include it in a configuration; it simply makes it available to be declared.
 
 ```puppet
-    class base (
-      Boolean               $motd      = true,
-      Stdlib::Absolutepath  $motd_file = '/etc/motd',
-    ) {
-      file { $motd_file:
-        ensure => file,
-        conatnet => 'Hello my friend!',
-      }
-      ...
-    }
+class base (
+  Boolean               $motd      = true,
+  Stdlib::Absolutepath  $motd_file = '/etc/motd',
+) {
+  file { $motd_file:
+    ensure  => file,
+    content => 'Hello my friend!',
+  }
+  ...
+}
 ```
 
 **Declare**:
@@ -336,15 +342,15 @@ To direct Puppet to include or instantiate a given class. To declare classes, us
 * with include function
 
 ```puppet
-    include base
+include base
 ```
 
 * like any other resources, setting parameters are optional
 
 ```puppet
-    class { 'base':
-      motd_file => '/etc/motd.new',
-    }
+class { 'base':
+  motd_file => '/etc/motd.new',
+}
 ```
 
 #### Idempotency of include
@@ -352,8 +358,8 @@ To direct Puppet to include or instantiate a given class. To declare classes, us
 * The function include is idempotent. That means you can use the `include` of the same class several times in your code.
 
 ```puppet
-    include base
-    include base
+include base
+include base
 ```
 
 * The class is declared just once, the first time it was used. Only works without setting parameters via manifest code.
@@ -373,11 +379,11 @@ Namespaces are segments that identify the directory and file structure for class
 Classes must correspond to the namespaces in its name.
 
 ```puppet
-    class base::ssh {
-      ...
-    }
+class base::ssh {
+  ...
+}
 
-    include base::ssh
+include base::ssh
 ```
 
 ### Autoloading
@@ -394,10 +400,10 @@ Static files in directory ***files***:
 * Served by Puppet fileserver as `puppet:///modules/modulename/filename`
 
 ```puppet
-    file { '/etc/motd':
-      ensure => file,
-      source => 'puppet:///modules/base/motd.txt',
-    }
+file { '/etc/motd':
+  ensure => file,
+  source => 'puppet:///modules/base/motd.txt',
+}
 ```
 
 Templates directory in ***templates***:
@@ -423,7 +429,6 @@ A sample solution can be found [here](./solutions/60_classes.md).
   * Hiera, a hierachical lookup
   * One global configuration
 
-
 ## Hiera
 
 * Hierarchy of lookups is configurable
@@ -436,21 +441,21 @@ A sample solution can be found [here](./solutions/60_classes.md).
   * EYAML-GPG - same but with GPG keys
 
 ```yaml
-    ---
-    version: 5
-    defaults:
-      # The default value for "datadir" is "data" under the same directory as the hiera.yaml
-      # file (this file)
-      # When specifying a datadir, make sure the directory exists.
-      # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
-      # datadir: data
-      # data_hash: yaml_data
-    hierarchy:
-      - name: "Per-node data (yaml version)"
-        path: "nodes/%{::trusted.certname}.yaml"
-      - name: "Other YAML hierarchy levels"
-        paths:
-          - "common.yaml"
+---
+version: 5
+defaults:
+  # The default value for "datadir" is "data" under the same directory as the hiera.yaml
+  # file (this file)
+  # When specifying a datadir, make sure the directory exists.
+  # See https://puppet.com/docs/puppet/latest/environments_about.html for further details on environments.
+  # datadir: data
+  # data_hash: yaml_data
+hierarchy:
+  - name: "Per-node data (yaml version)"
+    path: "nodes/%{::trusted.certname}.yaml"
+  - name: "Other YAML hierarchy levels"
+    paths:
+      - "common.yaml"
 ```
 
 **Notice**: Facts can also be used in `hiera.yaml` to control the lookup behavior!
@@ -471,7 +476,6 @@ A sample solution can be found [here](./solutions/70_hiera.md).
 * Add a new layer between *nodes* and *common.yaml* named `operatingsystem data (yaml version)` based on `facts.os.family`
 * Add yaml file for the osfamily of your machine
 
-
 ## Roles-Profiles-Pattern
 
 * Puppet is all about abstraction
@@ -489,13 +493,13 @@ A sample solution can be found [here](./solutions/70_hiera.md).
 ![component modules](images/component_modules.png)
 
 ```puppet
-    class apache (
-      $apache_name            = $::apache::params::apache_name,
-      $service_name           = $::apache::params::service_name,
-      $default_mods           = true,
-      $default_vhost          = true,
-      ...
-    }
+class apache (
+  $apache_name            = $::apache::params::apache_name,
+  $service_name           = $::apache::params::service_name,
+  $default_mods           = true,
+  $default_vhost          = true,
+  ...
+}
 ```
 
 ### Profile Module
@@ -506,17 +510,17 @@ A sample solution can be found [here](./solutions/70_hiera.md).
 * Parameters are welcome
 
 ```puppet
-    class profile::base ( {
-      String[1] $template = 'motd_base.erb',
-    ) {
-      include ssh
-      include postfix::mta
+class profile::base ( {
+  String[1] $template = 'motd_base.erb',
+) {
+  include ssh
+  include postfix::mta
 
-      class { 'motd':
-        template => "profile/${template}"
-      }
-      ...
-    }
+  class { 'motd':
+    template => "profile/${template}"
+  }
+  ...
+}
 ```
 
 ### Role Module (Optional)
@@ -548,7 +552,6 @@ Optional? Can also be mapped via hiera.
 
 A sample solution can be found [here](./solutions/80_profile.md).
 
-
 ## Templates
 
 Implemented by a function call:
@@ -559,7 +562,7 @@ Implemented by a function call:
   * can handle multiple templates
 
 ```puppet
-    template('file.erb')
+template('file.erb')
 ```
 
 * epp
@@ -567,7 +570,7 @@ Implemented by a function call:
   * a hash with parameter has to be passed to the template
 
 ```puppet
-    epp('file.epp', { 'parameter' => 'value' })
+epp('file.epp', { 'parameter' => 'value' })
 ```
 
 * inline versions of both functions exists
@@ -589,15 +592,15 @@ Implemented by a function call:
 Simple textfile including some Ruby code:
 
 ```ruby
-    <%# Comment not printed in file -%>
+<%# Comment not printed in file -%>
 
-    <% if @variable == true -%>
-    Print this <%= @variable %>
-    <% end -%>
+<% if @variable == true -%>
+Print this <%= @variable %>
+<% end -%>
 
-    <% @values.each do |value| -%>
-    Value is <%= value %>
-    <% end -%>
+<% @values.each do |value| -%>
+Value is <%= value %>
+<% end -%>
 ```
 
 ### EPP Syntax
@@ -605,18 +608,18 @@ Simple textfile including some Ruby code:
 Simple textfile including some Puppet code:
 
 ```puppet
-    <%- | Boolean $variable = true,
-          Array   $values
-    | -%>
-    <%# Comment not printed in file -%>
+<%- | Boolean $variable = true,
+      Array   $values
+| -%>
+<%# Comment not printed in file -%>
 
-    <% if $variable == true { -%>
-    Print this <%= $variable %>
-    <% } -%>
+<% if $variable == true { -%>
+Print this <%= $variable %>
+<% } -%>
 
-    <% $values.each |value| { -%>
-    Value is <%= value %>
-    <% } -%>
+<% $values.each |value| { -%>
+Value is <%= value %>
+<% } -%>
 ```
 
 **Notice**: This is puppet code, access to variables out of scope is possible!

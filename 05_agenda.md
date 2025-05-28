@@ -8,7 +8,7 @@
   * Resources and the abstraction layer
 * Working with Puppet
   * Classification and the control repository
-  * Allmost everything about variables, vacts, modules and classes
+  * Allmost everything about variables, facts, modules and classes
   * The use of Hiera and how to seperate code and data
   * Templates and functions
 
