@@ -224,7 +224,31 @@ A sample solution can be found [here](./solutions/130_lookup_behavior.md).
 
 ### Hiera Data Manager
 
-TODO
+The Hiera Data Manager ([HDM](https://github.com/betadots/hdm)) is a graphical user interface for displaying the evaluated keys for each node and environment.
+
+* Easy to setup via container
+
+![HDM](images/hdm.png)
+
+* Smart proxy for integration in [foreman](https://github.com/betadots/foreman_hdm)
+* Authentication via
+  * local SQLite database
+  * LDAP connection to a Server, e.g. Microsoft Active Directory
+  * Admin only manage additional user accounts, no data
+* Autorization (Roll Based Access Controll) via Groups
+  * Down to environment, node and key level
+
+![HDM](images/hdm_auth.png)
+
+* Optional management of data inside a git repository
+* Shows where values of the key come from
+
+![HDM](images/hdm_value.png)
+
+* Merge values if a special behavior for their keys are given
+
+![HDM](images/hdm_unique-1.png)
+![HDM](images/hdm_unique-2.png)
 
 ### Classification
 
@@ -240,12 +264,13 @@ classes:
 
 ```puppet
 node default {
-  lookup('classes', Array[String], 'first').include
+  lookup('classes', Array[String], 'unique').include
 }
 ```
 
 * Remember: There is a way to store and read trused information in and from the agent certificate
-* Have a look at your certificate in `/etc/puppetlabs/puppet/ssl/certs`
+* Have a look at your certificate in `/etc/puppetlabs/puppet/ssl/certs` 
+* But notice: HDM isn't able to evaluate this, it's just DSL code
 
 ```bash
 openssl x509 -in \<path to cert \> -noout -text

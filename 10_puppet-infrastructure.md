@@ -17,7 +17,6 @@
 * No matter how often the same catalog is applied to a node, the state is still the same as after the first run.
 * This means if several puppet runs are required to achieve the desired state, something is wrong.
 
-
 ## Impementations
 
 ### Puppet Core
@@ -53,44 +52,51 @@
 * It is used by Puppet to gather information about the node
 * You can also run it on command line `puppet facts` to list facts
 
-```bash
-    {
-      aio_agent_version: 7.18.0
-      augeas: {
-        version: "1.12.0"
-      }
-      disks: {
-        vda: {
-          size: "10.00 GiB",
-          size_bytes: 10737418240,
-          vendor: "0x1af4"
-        }
-      }
-      ...
-      system_uptime: {
-        days: 0,
-        hours: 2,
-        seconds: 8378,
-        uptime: "2:19 hours"
-      }
-      timezone: UTC
-      virtual: kvm
+(shortened output)
+
+```json
+{
+  "augeas": {
+    "version": "1.14.1"
+  },
+  "borgbackup": {
+    "version": "1.4.1"
+  },
+  "disks": {
+    "nvme0n1": {
+      "model": "WDS100T3X0C-00SJG0",
+      "serial": "2109D4449306",
+      "size": "931.51 GiB",
+      "size_bytes": 1000204886016,
+      "type": "ssd",
+      "wwn": "eui.e8238fa6bf530001001b444a460cef06"
+    }
+  },
+  "dmi": {
+    "bios": {
+      "release_date": "11/13/2024",
+      "vendor": "INSYDE Corp.",
+      "version": "03.05"
+    }
+}
 ```
 
 To get a special value of the structured data, use for example:
 
-```bash
-    $ puppet facts disks.vda --render-as yaml
-    ---
-    disks.vda:
-      size: "10.00 GiB",
-      size_bytes: 10737418240,
-      vendor: "0x1af4"
+```console
+$ puppet facts disks.vda --render-as yaml
+---
+disks.vda:
+  size: "10.00 GiB",
+  size_bytes: 10737418240,
+  vendor: "0x1af4"
+```
 
-    $ puppet facts disks.vda.size
-    {
-      "disks.vda.size": "10.00 GiB"
-    }
+```console
+$ puppet facts disks.vda.size
+{
+  "disks.vda.size": "10.00 GiB"
+}
 ```
 
 **Practice**:
@@ -115,8 +121,8 @@ Writing your own facts to extend the functionality of facter.
 * simple text file
 
 ```bash
-    key1=value1
-    key2=value2
+key1=value1
+key2=value2
 ```
 
 * Every executable that supplies to stdout key-value-pairs as
@@ -128,11 +134,10 @@ Writing your own facts to extend the functionality of facter.
   * even if the `-p` option also includes your own written facts
 
 ```bash
-    diff <(facter) <(facter -p)
-    447a448
-    > puppetversion => 8.14.0
+diff <(facter) <(facter -p)
+447a448
+> puppetversion => 8.14.0
 ```
-
 
 ## Puppet Agent
 
@@ -162,24 +167,24 @@ Writing your own facts to extend the functionality of facter.
 * `/etc/puppetlabs/puppet/puppet.conf` (INI format)
 * Use `puppet config print` shows the running and complete used configuration
 
-```bash
-    $ puppet config print
-    agent_catalog_run_lockfile = /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
-    agent_disabled_lockfile = /opt/puppetlabs/puppet/cache/state/agent_disabled.lock
-    allow_duplicate_certs = false
-    allow_pson_serialization = false
-    always_retry_plugins = true
-    autoflush = true
-    autosign = /etc/puppetlabs/puppet/autosign.conf
-    basemodulepath = /etc/puppetlabs/code/modules:/opt/puppetlabs/puppet/modules
-    ...
+```console
+$ puppet config print
+agent_catalog_run_lockfile = /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
+agent_disabled_lockfile = /opt/puppetlabs/puppet/cache/state/agent_disabled.lock
+allow_duplicate_certs = false
+allow_pson_serialization = false
+always_retry_plugins = true
+autoflush = true
+autosign = /etc/puppetlabs/puppet/autosign.conf
+basemodulepath = /etc/puppetlabs/code/modules:/opt/puppetlabs/puppet/modules
+...
 ```
 
 * or for only one special option:
 
-```bash
-    $ puppet config print ssldir
-    /etc/puppetlabs/puppet/ssl
+```terminal
+$ puppet config print ssldir
+/etc/puppetlabs/puppet/ssl
 ```
 
 * On the same way you can set option with `puppet config set`
@@ -196,15 +201,15 @@ A sample solution can be found [here](./solutions/15_puppet_config.md).
 With Puppet, everything that is managed is a resource or is traced back to one or more.
 
 ```puppet
-    type { 'title':
-      attribute1 => 'value1',
-      ...
-      attributeN => 'valueN',
-    }
+type { 'title':
+  attribute1 => 'value1',
+  ...
+  attributeN => 'valueN',
+}
 ```
 
 * Different types of resources have a differnt set of attributes
-* But there are attributes, the so-called **meta attributes**, which exist for every resource type 
+* But there are attributes, the so-called **meta attributes**, which exist for every resource type
 * With **defined resources** you can define your own types to extend Puppet
 
 ### Example Managing User
@@ -223,14 +228,14 @@ With Puppet, everything that is managed is a resource or is traced back to one o
   * Multiple platforms
 
 ```puppet
-    user { 'icinga':
-      ensure     => present,
-      gid        => 'icinga',
-      groups     => ['icingacmd'],
-      home       => '/var/spool/icinga',
-      shell      => '/sbin/nologin',
-      managehome => true,
-   }
+user { 'icinga':
+  ensure     => present,
+  gid        => 'icinga',
+  groups     => ['icingacmd'],
+  home       => '/var/spool/icinga',
+  shell      => '/sbin/nologin',
+  managehome => true,
+}
 ```
 
 ### Resource Abstraction Layer
@@ -262,19 +267,19 @@ tallable upgradeable versionable virtual_packages*
 * Querying all or one resource of a type returns Puppet code representation of current state
 * Setting attributes will change state using available provider
 
-```puppet
-    $ puppet resource package vim-enhanced
-    package { 'vim-enhanced':
-      ensure => 'purged',
-    }
+```console
+$ puppet resource package vim-enhanced
+package { 'vim-enhanced':
+  ensure => 'purged',
+}
 ```
 
-```puppet
-    $ puppet resource package vim-enhanced ensure=present
-    Notice: /Package[vim-enhanced]/ensure: created
-    package { 'vim-enhanced':
-      ensure => '7.4.160-1.el7',
-    }
+```console
+$ puppet resource package vim-enhanced ensure=present
+Notice: /Package[vim-enhanced]/ensure: created
+package { 'vim-enhanced':
+  ensure => '7.4.160-1.el7',
+}
 ```
 
 You get something similar to a man-page also with the `puppet describe` command!
@@ -339,4 +344,3 @@ In the same way as for the agent. But with an additional section (INI) `server` 
   * Can also run in simulation mode
 * Useful for **development and local testing** or server-less setups
 * Requires root privileges
-
