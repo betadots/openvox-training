@@ -235,15 +235,17 @@ The Hiera Data Manager ([HDM](https://github.com/betadots/hdm)) is a graphical u
   * local SQLite database
   * LDAP connection to a Server, e.g. Microsoft Active Directory
   * Admin only manage additional user accounts, no data
-* Autorization: All or nothing, no RBAC (Roll Based Access Controll)
+* Autorization (Roll Based Access Controll) via Groups
+  * Down to environment, node and key level
 
 ![HDM](images/hdm_auth.png)
 
+* Optional management of data inside a git repository
 * Shows where values of the key come from
 
 ![HDM](images/hdm_value.png)
 
-* Merges values if a special behavior for their keys are given
+* Merge values if a special behavior for their keys are given
 
 ![HDM](images/hdm_unique-1.png)
 ![HDM](images/hdm_unique-2.png)
@@ -268,6 +270,7 @@ node default {
 
 * Remember: There is a way to store and read trused information in and from the agent certificate
 * Have a look at your certificate in `/etc/puppetlabs/puppet/ssl/certs` 
+* But notice: HDM isn't able to evaluate this, it's just DSL code
 
 ```bash
 openssl x509 -in \<path to cert \> -noout -text
