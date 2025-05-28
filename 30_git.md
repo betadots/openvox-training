@@ -34,7 +34,7 @@ Configuration is stored in `~/.gitconfig`.
 
 ![Git workflow and working with snapshots](images/git_snapshots.png)
 
-```bash
+```console
 $ git clone git@github.com:voxpupuli/puppet-icinga2.git
 $ cd puppet-icinga2
 ✔ ~/puppet-icinga2 [main|✔]
@@ -51,7 +51,7 @@ Your branch is up to date with 'origin/main'.
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-	modified:   metadata.json
+    modified:   metadata.json
 
 no changes added to commit (use "git add" and/or "git commit -a")
 
@@ -59,7 +59,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 $ git add ./metadata.json
 ✔ ~/puppet-icinga2 [main|● 1]
 $ git commit -m 'meaningful description'
-✔ ~/puppet-icinga2 [main|✔] 
+✔ ~/puppet-icinga2 [main|✔]
 $ git push
 Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
@@ -100,11 +100,11 @@ A sample solution can be found [here](./solutions/100_create_git.md).
   * git merge \<branch name> (in current)
   * git merge \<branch A> \<branch B> (branch A in B)
 * Delete
-  * git branch -d \<branch name> 
+  * git branch -d \<branch name>
 
 ![Working with branches](images/git_branches.png)
 
-```bash
+```console
 ✔ ~/puppet-icinga2 [main|✔]
 $ git checkout -b lbetz/fix-433
 Switched to a new branch 'lbetz/fix-433'
@@ -140,8 +140,8 @@ Deleted branch lbetz/fix-433 (was 29907a5).
 * Delete
   * git branch -D \<branch name> (non synchronized)
   * git push \<remote name> --delete \<branch name>
-  
-```bash
+
+```console
 $ git push origin lbetz/fix-433
 Enumerating objects: 5, done.
 Counting objects: 100% (5/5), done.
