@@ -107,7 +107,7 @@ A sample solution can be found [here](./solutions/30_classification.md).
 **Interpolation**
 
 ```puppet
-    $motd_file = "${conf_dir}/motd}"
+    $motd_file = "${conf_dir}/motd"
 ```
 
 **Practice**:
@@ -323,8 +323,8 @@ To specify the contents and behavior of a class. Defining a class doesn't automa
       Stdlib::Absolutepath  $motd_file = '/etc/motd',
     ) {
       file { $motd_file:
-        ensure => file,
-        conatnet => 'Hello my friend!',
+        ensure  => file,
+        contnet => 'Hello my friend!',
       }
       ...
     }
