@@ -99,7 +99,7 @@ $motd_file = '/etc/motd'
 * Some naming conventions enforced, some keywords reserved
 * Depending on scope
 
-  ![Variable scope](images/scope-euler-diagram.png)
+  ![Variable scope](../images/scope-euler-diagram.png)
 
 * Different data types
 * Actually are constants!
@@ -490,7 +490,7 @@ A sample solution can be found [here](./solutions/70_hiera.md).
 
 ### Component Modules
 
-![component modules](images/component_modules.png)
+![component modules](../images/component_modules.png)
 
 ```puppet
 class apache (
@@ -504,7 +504,7 @@ class apache (
 
 ### Profile Module
 
-![profile modules](images/profile_modules.png)
+![profile modules](../images/profile_modules.png)
 
 * Declare resources and classes inside
 * Parameters are welcome
@@ -527,7 +527,7 @@ class profile::base ( {
 
 Optional? Can also be mapped via hiera.
 
-![role modules](images/role_modules.png)
+![role modules](../images/role_modules.png)
 
 * Only includes profile classes
 * Transfer parameters to prifile classes only via Hiera

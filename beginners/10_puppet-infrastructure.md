@@ -9,7 +9,7 @@
 * Define the desired state and not how to get there
   * Idempotence
 
-  ![Puppet Workflow](images/puppet_workflow.png)
+  ![Puppet Workflow](../images/puppet_workflow.png)
 
 ### Idempotency
 
@@ -248,7 +248,7 @@ user { 'icinga':
 
 A list can be generated with the `puppet describe -l` command!
 
-  ![Resource Abstraction Layer](images/resource_abstraction_layer.png)
+  ![Resource Abstraction Layer](../images/resource_abstraction_layer.png)
 
 #### Providers
 

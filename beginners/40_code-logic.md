@@ -228,7 +228,7 @@ The Hiera Data Manager ([HDM](https://github.com/betadots/hdm)) is a graphical u
 
 * Easy to setup via container
 
-![HDM](images/hdm.png)
+![HDM](../images/hdm.png)
 
 * Smart proxy for integration in [foreman](https://github.com/betadots/foreman_hdm)
 * Authentication via
@@ -238,17 +238,17 @@ The Hiera Data Manager ([HDM](https://github.com/betadots/hdm)) is a graphical u
 * Autorization (Roll Based Access Controll) via Groups
   * Down to environment, node and key level
 
-![HDM](images/hdm_auth.png)
+![HDM](../images/hdm_auth.png)
 
 * Optional management of data inside a git repository
 * Shows where values of the key come from
 
-![HDM](images/hdm_value.png)
+![HDM](../images/hdm_value.png)
 
 * Merge values if a special behavior for their keys are given
 
-![HDM](images/hdm_unique-1.png)
-![HDM](images/hdm_unique-2.png)
+![HDM](../images/hdm_unique-1.png)
+![HDM](../images/hdm_unique-2.png)
 
 ### Classification
 
@@ -337,11 +337,11 @@ A sample solution can be found [here](./solutions/140_classification.md).
 
 ### Implicit
 
-![Implicit dependencies](images/implicit_dependencies.png)
+![Implicit dependencies](../images/implicit_dependencies.png)
 
 ### Implicit dependencies of `user`
 
-![Implicit dependencies of user](images/implicit_dependencies_user.png)
+![Implicit dependencies of user](../images/implicit_dependencies_user.png)
 
 #### Implicit dependencies of `exec`
 
@@ -361,7 +361,7 @@ exec { 'command':
 }
 ```
 
-![Implicit dependencies of user](images/implicit_dependencies_exec.png)
+![Implicit dependencies of user](../images/implicit_dependencies_exec.png)
 
 ### References
 
@@ -411,13 +411,13 @@ More commonly used to declare a sequence between different resources.
   * before - apply this resource before the reference
 * Required for idempotency
 
-![Explicit dependencies](images/explicit_dependencies_ordering.png)
+![Explicit dependencies](../images/explicit_dependencies_ordering.png)
 
 * Refresh Events:
   * subscribe - if reference is changed refresh this resource
   * notify - if this resource is changed refresh the reference
 
-![Explicit dependencies with refreshing](images/explicit_dependencies_refresh.png)
+![Explicit dependencies with refreshing](../images/explicit_dependencies_refresh.png)
 
 **Practice**:
 

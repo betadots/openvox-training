@@ -32,7 +32,7 @@ Configuration is stored in `~/.gitconfig`.
 
 ## Workflow
 
-![Git workflow and working with snapshots](images/git_snapshots.png)
+![Git workflow and working with snapshots](../images/git_snapshots.png)
 
 ```console
 $ git clone git@github.com:voxpupuli/puppet-icinga2.git
@@ -102,7 +102,7 @@ A sample solution can be found [here](./solutions/100_create_git.md).
 * Delete
   * git branch -d \<branch name>
 
-![Working with branches](images/git_branches.png)
+![Working with branches](../images/git_branches.png)
 
 ```console
 ✔ ~/puppet-icinga2 [main|✔]
