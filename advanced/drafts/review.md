@@ -174,7 +174,7 @@ TODO
   * Out-of-Scope:
 
   ```puppet
-  $apache::confdir
+  $apache::mod::ssl::ssl_cert
   ```
 
 ### Data Structures
@@ -416,4 +416,51 @@ Templates in `./templates`
   * Embedded Ruby (ERB): template("{MODULE NAME}/{TEMPLATE NAME}.erb")
   * Embedded Puppet (EPP): epp("{MODULE NAME}/{TEMPLATE NAME}.epp")
 
+## Iterations or Loops
+
+Implemented as lambda functions.
+
+```puppet
+$binaries = ["facter", "hiera", "bolt", "puppet"]
+
+$binaries.each |String $binary| {
+  file { "/usr/bin/${binary}":
+    ensure => link,
+    target => "/opt/puppetlabs/bin/${binary}",
+  }
+}
+```
+
+* Introduced in Puppet 4
+* Different lambda functions
+  * each - repeat a code block for each object
+  * slice - repeat a code block a given number of times
+  * filter - remove non-matching elements
+  * map - transform values to some data structure
+  * reduce - combine values to a new data structure
+  * with - create a private code block (no real iteration)
+
+## Puppet Apply Command
+
+```console
+$ sudo puppet apply --noop apache/examples/init.pp
+Notice: /Stage[main]/Apache/Package[httpd]/ensure:
+ current_value absent, should be present (noop)
+...
+Notice: Finished catalog run in 0.20 seconds
+
+$ sudo puppet apply apache/examples/init.pp
+Notice: /Stage[main]/Apache/Package[httpd]/ensure: created
+Notice: /Stage[main]/Apache/Service[httpd]/ensure:
+  ensure changed 'stopped' to 'running'
+Notice: Finished catalog run in 8.94 seconds
+```
+
+* The Puppet apply command combines server and agent functionality
+  * Takes a file containing Puppet code
+  * Gathers information using Facter
+  * Compiles a catalog
+  * Enforces the configuration
+  * Can also run in simulation mode
+* Useful for development and local testing or server-less setups
 
