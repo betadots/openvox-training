@@ -129,6 +129,13 @@ class ntp {
 
 Outdated. Is solved today conceptually by good module design.
 
+* Allow for specific ordering of a class during runtime
+* Are declared as resources
+* Use existing relationship syntax
+* There is always an implied stage called main
+* Stage main is the default stage for all classes
+* Only entire classes can be put in a run stage
+
 Metaparameter:
 
 ```puppet
