@@ -56,20 +56,20 @@ end
 ```console
 $ cat {MODULE NAME}/facts.d/datacenter.yaml
 ---
-location: nuremberg
+location: berlin
 cluster: webserver
 
 $ cat {MODULE NAME}/facts.d/datacenter.txt
-location=nuremberg
+location=berlin
 cluster=webserver
 
 $ cat {MODULE NAME}/facts.d/datacenter.py
 #!/usr/bin/env python
-data = {"location" : "nuremberg", "cluster" : "webserver" }
+data = {"location" : "berlin", "cluster" : "webserver" }
 
 for k in data:
 print "%s=%s" % (k,data[k])
 
 $ facter location
-nuremberg
+berlin
 ```

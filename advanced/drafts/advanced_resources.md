@@ -63,7 +63,7 @@ All system administrators:
 User <| groups == 'sysadmin' |>
 ```
 
-All users tagged with Nuremberg:
+All users tagged with `berlin`:
 
 ```puppet
 User <| tag == 'berlin' |>
