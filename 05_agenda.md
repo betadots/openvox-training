@@ -1,4 +1,4 @@
-# Agenda OpenVox for Beginners
+# Agenda OpenVox/Puppet for Beginners
 
 ## Day 1
 
@@ -6,10 +6,10 @@
   * Concept and workflow
   * Facts, agent, server, OpenVoxDB and apply
   * Resources and the abstraction layer
-* Working with Puppet
+* Working with OpenVox/Puppet
   * Classification and the control repository
-  * Allmost everything about variables, facts, modules and classes
-  * The use of Hiera and how to seperate code and data
+  * Almost everything about variables, facts, modules and classes
+  * The use of Hiera and how to separate code and data
   * Templates and functions
 
 ## Day 2
@@ -28,4 +28,4 @@
 * Practices with Profile Classes
   * More complex examples of the use and connection of upstream modules
 * Beyond Puppet DSL
-  * Introducting Bolt and how to run scripts, tasks and plans
+  * Introducing Bolt and how to run scripts, tasks and plans

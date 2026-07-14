@@ -27,6 +27,6 @@ Grafana is an open source application for the graphical representation of data f
 * Install module `puppet-nftables` and all its dependencies
 * Setup a firewall on all hosts
   * allow all outgoing traffic and incoming ssh and icmp
-  * additinal only for Grafana hosts allow incomming http
+  * additional only for Grafana hosts allow incoming http
 
 A sample solution can be found [here](./solutions/170_grafana.md).

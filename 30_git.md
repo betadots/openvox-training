@@ -13,9 +13,9 @@ Git is a distributed version control system that tracks versions of files.
 ## Basic git commands
 
 | Commands                     | Description                           |
-|------------------------------|---------------------------------------|
+| ------------------------------| ---------------------------------------|
 | git clone                    | download to working space             |
-| git status, log, diff        | shoe status, hitory, differences      |
+| git status, log, diff        | shoe status, history, differences     |
 | git add, rm, mv, commit      | transfer change to git                |
 | git branch, checkout, switch | manages branches                      |
 | git push, rebase, merge      | communication the remote repositories |
@@ -24,8 +24,8 @@ Git is a distributed version control system that tracks versions of files.
 
 Who you are and how you can be reached:
 
-* git config --global user.name 'sudent\<N\>'
-* git config --global user.email 'sudent\<N\>@domain.tld'
+* git config --global user.name 'student\<N\>'
+* git config --global user.email 'student\<N\>@domain.tld'
 * git config --global push.default simple
 
 Configuration is stored in `~/.gitconfig`.
@@ -73,13 +73,13 @@ To /root/repo
 
 * Change to your working directory
 * Create a git repository `git init`
-* Add a file *.gitignore* with lines: `modules` and `*.swp` to explude the modules directory from git
+* Add a file *.gitignore* with lines: `modules` and `*.swp` to exclude the modules directory from git
 * Check `git status`
 * Rename the current branch `git branch -m student\<N\>`
 * Create a connection to the remote repository `git remote add origin git@\<git url\>:control.git`
 * Add files and directories to your new repository `git add .`
 * Check `git status`
-* Do yout first commit `git commit -m 'Initial commit'`
+* Do your first commit `git commit -m 'Initial commit'`
 * Synchronize the local repository with the remote `git push origin student\<N\>`
 
 A sample solution can be found [here](./solutions/100_create_git.md).
@@ -159,7 +159,7 @@ To git@github.com:voxpupuli/puppet-icinga2.git
 
 **Practice**:
 
-* Install the `chrony` module from VoxPupuli via `Puppetfile` and `r10k`
+* Install the `chrony` module from Vox Pupuli via `Puppetfile` and `r10k`
 * Add a parameter `time_servers` for setting time servers to `profile:base`
 * Pass this parameter to class `chrony` in your `profile::base` class
 * Test your code changes locally with `puppet apply`

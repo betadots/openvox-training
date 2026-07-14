@@ -2,7 +2,7 @@
 
 ## Conditionals
 
-* Use a condional to manage time servers with `chrony` only on RedHat platforms and with `systemd` on Debian.
+* Use a conditional to manage time servers with `chrony` only on RedHat platforms and with `systemd` on Debian.
 
 ```bash
     $ cd ~/puppetcode

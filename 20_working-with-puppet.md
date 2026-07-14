@@ -23,7 +23,7 @@ We will now start with only one environment by working in one directory and the 
 ### Environments
 
 * Environments allow to serve different code to different stages
-* Directory enviroments
+* Directory environments
   * Path set on the server to serve an environment per directory
   * Directory contains a main manifest and modules
 * Assignment
@@ -33,6 +33,9 @@ We will now start with only one environment by working in one directory and the 
 
 ```console
 $ ls -l /etc/puppetlabs/code/environments/production
+```
+
+```text
 data  environment.conf  hiera.yaml  manifests  modules Puppetfile
 ```
 
@@ -112,10 +115,10 @@ $motd_file = "${conf_dir}/motd"
 
 **Practice**:
 
-* Assign a variable with any value outside your node decrations in your `manifests/site.pp`
+* Assign a variable with any value outside your node declarations in your `manifests/site.pp`
 * Use this variable as title in your `notify` resource
 * Run `puppet apply` on your `manifests/site.pp`
-* Now add the same variable inside your node declaration and assign a differnt value
+* Now add the same variable inside your node declaration and assign a different value
 * Rerun `puppet apply` and compare the results
 
 A sample solution can be found [here](./solutions/40_variables.md).
@@ -205,9 +208,9 @@ fact('os')
 fact('os.family')
 ```
 
-**Notice**: Access like `$::kernel` or `$::os['family']` is deprcated and will not be supported in the future.
+**Notice**: Access like `$::kernel` or `$::os['family']` is deprecated and will not be supported in the future.
 
-* All trusted information such as certname or all other properties from the certifikate are also avaiable':
+* All trusted information such as certname or all other properties from the certificate are also available':
 
 ```puppet
 $trusted['certname']
@@ -253,7 +256,7 @@ The GitHub repositories can also be used directly for the following.
 
 **Practice**:
 
-* Importent: Change into your puppet working directory
+* Important: Change into your puppet working directory
 * Search the forge for a module `motd`
 * Use `puppet module install` to download and install the module motd into your `./modules` directory
 * Check the content of your `./modules` directory
@@ -275,13 +278,15 @@ modulename
 |-- spec           <- unit tests
 |-- templates      <- dynamic files in erb or epp syntax
 |-- types          <- custom data types
+|-- tasks          <- Puppet tasks
+|-- plans          <- Puppet plans
 `-- examples       <- smoke tests
 ```
 
 ### Puppetfile
 
 * Specify which modules and data you wanna be installed
-  * downloads modules from puppetforge
+  * downloads modules from Puppet Forge
   * but also any data from any git repository
 * For automation `r10k` from package `bolt` is used
 * Caution: Dependencies are not automatically resolved
@@ -307,7 +312,7 @@ mod 'icinga2',
 
 * Create a `Puppetfile` in your working directory
 * Add module `puppetlabs/motd` and its dependencies to your `Puppetfile`
-* Remove all directores from directory `./modules/` via `rm -rf modules/*`
+* Remove all directories from directory `./modules/` via `rm -rf modules/*`
 * Now execute `/opt/puppetlabs/bolt/bin/r10k puppetfile install -v` to reinstall the desired modules
 * Check the content of the `./modules/` directory
 
@@ -370,11 +375,12 @@ include base
 
 Namespaces are segments that identify the directory and file structure for classes:
 
-| File path                        | Namespace             |
-|----------------------------------|-----------------------|
-| manifests/base.pp                | base                  |
-| manifests/base/ssh.pp            | base::ssh             |
-| manifests/linux/debian/apache.pp | linux::debian::apache |
+| File path                                | Namespace                      |
+| ------------------------------------------| --------------------------------|
+| profile/manifests/init.pp                | profile                        |
+| profile/manifests/base.pp                | profile::base                  |
+| profile/manifests/base/ssh.pp            | profile::base::ssh             |
+| profile/manifests/linux/debian/apache.pp | profile::linux::debian::apache |
 
 Classes must correspond to the namespaces in its name.
 
@@ -397,7 +403,7 @@ Classes in module directory ***manifests***:
 
 Static files in directory ***files***:
 
-* Served by Puppet fileserver as `puppet:///modules/modulename/filename`
+* Served by Puppet fileserver as `puppet:///modules/<modulename>/filename`
 
 ```puppet
 file { '/etc/motd':
@@ -416,7 +422,7 @@ Templates directory in ***templates***:
 
 * Examine the `puppetlabs/motd` module
 * and use it to manage a message of the day
-* add your code to yout node declaration in `manifests/site.pp`
+* add your code to your node declaration in `manifests/site.pp`
 
 A sample solution can be found [here](./solutions/60_classes.md).
 
@@ -426,7 +432,7 @@ A sample solution can be found [here](./solutions/60_classes.md).
 * Automatic Lookup of parameters was introduced in Puppet 3
 * Improvements in Puppet 4.9
 * Default is
-  * Hiera, a hierachical lookup
+  * Hiera, a hierarchical lookup
   * One global configuration
 
 ## Hiera
@@ -435,7 +441,7 @@ A sample solution can be found [here](./solutions/60_classes.md).
   * Hierarchy level can be fix or use variables
   * Hiera 4 was never released as stable, replaced in Puppet 4.9
   * Environment and module configuration uses Hiera 5
-* Different backends are avaiable
+* Different backends are available
   * YAML/JSON - default
   * EYAML - YAML with encrypted fields
   * EYAML-GPG - same but with GPG keys
@@ -462,10 +468,10 @@ hierarchy:
 
 **Practice**:
 
-* Rewrite your node declarition to use only an `include motd` instead of a declaration with `class`
+* Rewrite your node declaration to use only an `include motd` instead of a declaration with `class`
 * Add key `motd::content` with any value to `data/common.yaml`
-* Run `puppet aplly` and check the result
-* Add a diffrent value to the same key in `data/nodes/<your certname>.yaml`
+* Run `puppet apply` and check the result
+* Add a different value to the same key in `data/nodes/<your certname>.yaml`
 * Tip: To get the correct certname use `puppet config print certname`
 * Rerun `puppet apply`
 
@@ -474,7 +480,7 @@ A sample solution can be found [here](./solutions/70_hiera.md).
 **Bonus**:
 
 * Add a new layer between *nodes* and *common.yaml* named `operatingsystem data (yaml version)` based on `facts.os.family`
-* Add yaml file for the osfamily of your machine
+* Add yaml file for the OS family of your machine
 
 ## Roles-Profiles-Pattern
 
@@ -530,7 +536,7 @@ Optional? Can also be mapped via hiera.
 ![role modules](images/role_modules.png)
 
 * Only includes profile classes
-* Transfer parameters to prifile classes only via Hiera
+* Transfer parameters to profile classes only via Hiera
 * Parameterization of role classes is not permitted
 
 ```puppet
@@ -542,7 +548,7 @@ Optional? Can also be mapped via hiera.
 
 **Practice**:
 
-* Create a dircetory `site-modules` in your working directory
+* Create a directory `site-modules` in your working directory
 * Add this one to the `modulepath` in the `environment.conf`
 * Create a new module `profile` to the new path
 * Add a class `base` to the new module
