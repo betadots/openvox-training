@@ -2,7 +2,7 @@
 
 ## Variables
 
-* Assign a variable with any value outside your node decrations in your `manifests/site.pp`
+* Assign a variable with any value outside your node declarations in your `manifests/site.pp`
 
 ```puppet
     $var = 'Puppet'
@@ -32,7 +32,7 @@
     Notice: Applied catalog in 0.03 seconds
 ```
 
-* Now add the same variable inside your node declaration and assign a differnt value
+* Now add the same variable inside your node declaration and assign a different value
 
 ```puppet
     $var = 'Puppet'

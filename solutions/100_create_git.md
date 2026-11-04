@@ -15,7 +15,7 @@
     Initialized empty Git repository in /root/puppetcode/.git/
 ```
 
-* Add a file *.gitignore* with lines: `modules` and `*.swp` to explude the modules directory from git
+* Add a file *.gitignore* with lines: `modules` and `*.swp` to exclude the modules directory from git
 
 ```bash
     *.swp
@@ -68,16 +68,18 @@
 * Create a connection to the remote repository `git remote add origin git@\<git url\>:control.git`
 
 ```bash
-    $ git remote add origin git@<git url>:<path>/<repo>>.git
+    $ git remote add origin git@<git url>:<path>/<repo>.git
     $ git remote -v
     origin	git@<git url>:<path>/<repo>.git (fetch)
     origin	git@<git url>:<path>/<repo>.git (push)
 ```
 
-* Add files and directories to your new repository `git add .`
+**Hint** in betadots trainings the repo is at `git@gitlab:puppet/control-repo.git`
+
+* Add files and directories to your new repository `git add --all`
 
 ```bash
-    $ git add .
+    $ git add --all
 ```
 
 * Check `git status`
@@ -101,7 +103,7 @@
     	new file:   site-modules/profile/templates/motd.epp
 ```
 
-* Do yout first commit `git commit -m 'Initial commit'`
+* Do your first commit `git commit -m 'Initial commit'`
 
 ```bash
     $ git commit -m 'Initial commit'

@@ -2,7 +2,7 @@
 
 ## Setup a Grafana with PostgreSQL as Database Backend
 
-* Install modules `puppetlabs-postgresql` and `puppet-grafana` and all their dependencies, pin your modules to the last version 
+* Install modules `puppetlabs-postgresql` and `puppet-grafana` and all their dependencies, pin your modules to the last version
 
 ```bash
     $ cd ~/puppetcode
@@ -67,7 +67,7 @@
 ```
 
 ```puppet
-    include profiel::base
+    include profile::base
 
     class { 'profile::grafana':
       db_password => 'supersecret',
@@ -109,12 +109,11 @@
     }
 ```
 
-* Rerun your smoke test, if succeded grafana is reachable on port 3000
+* Rerun your smoke test, if succeeded grafana is reachable on port 3000
 
 ```bash
     $ puppet apply site-modules/profile/examples/grafana.pp
 ```
-
 
 ## Connect an upstream Nginx as a Reverse Proxy
 
@@ -137,7 +136,7 @@
       -> class { 'grafana':
         cfg => {
           server   => {
-            http_port => '127.0.0.1:3000',
+            http_addr => '127.0.0.1',
           },
           database => {
             type      => 'postgres',
@@ -188,7 +187,6 @@
     }
 ```
 
-
 ## Secure your hosts with `nftables` local firewalls
 
 * Install module `puppet-nftables` and all its dependencies
@@ -225,7 +223,7 @@
 
 * Setup a firewall on all hosts
   * allow all outgoing traffic and incoming ssh and icmp
-  * additinal only for Grafana hosts allow incomming http
+  * additional only for Grafana hosts allow incoming http
 
 ```puppet
     class profile::base (
@@ -297,4 +295,4 @@
         proxy       => 'http://localhost:3000',
       }
     }
-``` 
+```

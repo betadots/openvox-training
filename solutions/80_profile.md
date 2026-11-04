@@ -2,7 +2,7 @@
 
 ## Profile Pattern
 
-* Create a dircetory `site-modules` in your environment
+* Create a directory `site-modules` in your environment
 
 ```bash
     $ cd ~/puppetcode

@@ -31,6 +31,8 @@
           - "common.yaml"
 ```
 
+* Check your nodes extension using `puppet facts cert_extension.pp_role`.
+
 * Create a `webserver.yaml` for the role with a key `classes` (array) and item `profile::base`
 
 ```bash
@@ -45,7 +47,7 @@
       - profile::myapp
 ```
 
-* Set the merge behavior to `first` 
+* Set the merge behavior to `first`
 
 ```bash
     $ vim data/common.yaml

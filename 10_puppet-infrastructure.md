@@ -106,6 +106,7 @@ $ puppet facts disks.vda.size
 ```
 
 **Practice**:
+
 * Log in to your student workstation
 * Take a look at the issue of facter at your leisure
 * Determine specific individual values, e.g.
@@ -201,7 +202,8 @@ $ puppet config print ssldir
 
 * On the same way you can set option with `puppet config set`
 
-**Practice**
+**Practice**:
+
 * Check out the current state of `report` that controls the sending of reports
 * Change the behavior
 * After that take a look in the configuration file `puppet.conf`
@@ -302,6 +304,7 @@ package { 'vim-enhanced':
 You get something similar to a man-page also with the `puppet describe` command!
 
 **Practice**:
+
 * Check current state of resource `chronyd` of type service
 * Install package `vim-enhanced` if it is not already installed
 * Add user `kermit` and remove him again
@@ -309,6 +312,7 @@ You get something similar to a man-page also with the `puppet describe` command!
   * Test the behavior with `managehome=true`
 
 A sample solution can be found [here](./solutions/20_puppet_resource.md).
+
 ## Puppet Server
 
 * The server runs on a central machine
@@ -336,7 +340,6 @@ In the same way as for the agent. But with an additional section (INI) `server` 
   * Enables Collaboration
   * Hooks or pipelines enable **automatic validation and deployment**
 
-
 ## PuppetDB
 
 * Data Store:
@@ -349,7 +352,6 @@ In the same way as for the agent. But with an additional section (INI) `server` 
 * Uses:
   * Clojure (dialect of Lisp runs in JVM)
   * PostgreSQL
-
 
 ## Puppet Apply
 

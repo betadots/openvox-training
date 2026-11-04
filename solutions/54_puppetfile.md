@@ -17,7 +17,7 @@
     mod 'puppetlabs/registry'
 ```
 
-* Remove all directores from directory `./modules/` via `rm -rf modules/*`
+* Remove all directories from directory `./modules/` via `rm -rf modules/*`
 
 ```bash
     $ rm -rf ./modules/*

@@ -28,10 +28,10 @@ File {
 ```puppet
 file {
   default:
+    ensure => file,
     mode   => '0600',
     owner  => 'root',
     group  => 'root',
-    ensure => file,
   ;
   '/etc/ssh_host_key':
   ;
@@ -51,7 +51,6 @@ file {
 * Merge and push the changes after all tests were successful
 
 A sample solution can be found [here](./solutions/110_defaults.md).
-
 
 ## Conditionals
 
@@ -165,7 +164,6 @@ unless $ensure =~ /^(absent|purged)$/ {
 
 A sample solution can be found [here](./solutions/120_conditionals.md).
 
-
 ## Hiera Lookup Behavior
 
 * By default the lookup returns the first match
@@ -188,7 +186,7 @@ lookup('base::packages', Array[String], 'unique')
 ```
 
 | Value  | Behavior                                                                        |
-| --------| ---------------------------------------------------------------------------------|
+| ------ | ------------------------------------------------------------------------------- |
 | first  | Returns the first value found, with no merging. The default                     |
 | unique | Called array merge. You get a flattened array with all duplicate values removed |
 | hash   | Return a merged hash. Without duplicate keys. Highest priority (level) win.     |
@@ -337,8 +335,8 @@ A sample solution can be found [here](./solutions/140_classification.md).
 
 * Default order depends on <ins>order of declaration</ins> and implicit dependencies
 * Ordering can be changed to:
-    * Hash based ordering which was default in older versions
-    * Random ordering to ensure all necessary dependencies are declared
+  * Hash based ordering which was default in older versions
+  * Random ordering to ensure all necessary dependencies are declared
 * Dependencies can be set explicitly
 
 ### Implicit
@@ -432,7 +430,7 @@ More commonly used to declare a sequence between different resources.
   * config file `/etc/nginx/nginx.conf
   * and service `nginx`
 
-**Tip**: copy the config file from a installation you did and remove the package, remeber the `puppet resource` command.
+**Tip**: copy the config file from a installation you did and remove the package, remember the `puppet resource` command.
 
 A sample solution can be found [here](./solutions/150_ordering.md).
 
@@ -461,16 +459,16 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 * Prevent Puppet from making changes, by setting the `noop` to `true`
 * Change logging verbosity with `loglevel`
 
-
 ## Iterations
 
  Puppet comes with some lambdas to do loops and iterations
-  * each - repeat a code block for each object
-  * slice - repeat a code block a given number of times
-  * filter - remove non-matching elements
-  * map - transform values to some data structure
-  * reduce - combine values to a new data structure
-  * with - create a private code block (no real iteration)
+
+* each - repeat a code block for each object
+* slice - repeat a code block a given number of times
+* filter - remove non-matching elements
+* map - transform values to some data structure
+* reduce - combine values to a new data structure
+* with - create a private code block (no real iteration)
 
 ```puppet
 $binaries = ['facter', 'puppet', 'r10k']

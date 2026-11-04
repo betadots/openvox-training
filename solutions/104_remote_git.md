@@ -91,13 +91,13 @@
 * Do a puppet agent run `puppet agent -t --environment student<N>-time`
 
 ```bash
-    $ git agent -t --environment student<N>-time
+    $ puppet agent -t --environment student<N>-time
 ```
 
 * After success, merge the branch into `student<N>` and push it
 
 ```bash
-    $ git checkout student<N>
+    $ git switch student<N>
     Switched to branch 'student<N>'
 
     $ git merge student<N>-time
@@ -114,7 +114,7 @@
        21f7047..7436b8d  student<N> -> student<N>
 ```
 
-* Do not forget to cleanup and remove the local an remote branch `student<N>-message`
+* Do not forget to cleanup and remove the local and remote branch `student<N>-message`
 
 ```bash
     $ git branch -d student<N>-time
