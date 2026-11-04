@@ -68,10 +68,10 @@
 * Create a connection to the remote repository `git remote add origin git@\<git url\>:control.git`
 
 ```bash
-    $ git remote add origin git@<git url>:control.git
+    $ git remote add origin git@<git url>:<path>/<repo>>.git
     $ git remote -v
-    origin	git@<git url>:ontrol.git (fetch)
-    origin	git@<git url>:control.git (push)
+    origin	git@<git url>:<path>/<repo>.git (fetch)
+    origin	git@<git url>:<path>/<repo>.git (push)
 ```
 
 * Add files and directories to your new repository `git add .`
@@ -118,16 +118,28 @@
      create mode 100644 site-modules/profile/templates/motd.epp
 ```
 
+* Generate an SSH Key to be used on the git server account, verify functionality
+
+```bash
+cd ~
+ssh-keygen -t ed25519
+cat ~/.ssh/id_ed25519.pub
+# copy content to git server account
+
+ssh git@<server>
+# you should see a greeting message
+```
+
 * Synchronize the local repository with the remote `git push origin student\<N\>`
 
 ```bash
-    $ git push origin lbetz
+    $ git push origin student<N>
     Enumerating objects: 18, done.
     Counting objects: 100% (18/18), done.
     Delta compression using up to 10 threads
     Compressing objects: 100% (10/10), done.
     Writing objects: 100% (18/18), 2.23 KiB | 2.23 MiB/s, done.
     Total 18 (delta 0), reused 0 (delta 0), pack-reused 0
-    To git@<git url>:control.git
+    To git@<git url>:<path>/<repo>.git
      * [new branch]      student<N> -> student<N>
 ```

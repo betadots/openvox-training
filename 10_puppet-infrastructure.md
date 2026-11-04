@@ -17,25 +17,25 @@
 * No matter how often the same catalog is applied to a node, the state is still the same as after the first run.
 * This means if several puppet runs are required to achieve the desired state, something is wrong.
 
-## Impementations
+## Implementations
 
 ### Puppet Core
 
 * Emerged from Puppet Open Source
 * Certified Puppet builds and guaranteed SLAs from vendor
-* Developers or free users licence (EULA) available
+* Developers or free users license (EULA) available
 * Chargeable licenses for 25 nodes or more
 
 ### OpenVox
 
-* Open Source [community](https://github.com/openvoxproject) projekt forked from Puppet Open Source
+* Open Source [community](https://github.com/openvoxproject) project forked from Puppet Open Source
 * Started in the end of 2024
 * Also offers all components as container images
 
 ### Puppet Enterprise
 
 * Packaging for additional platforms including additional components
-* Puppet Enterprise Console as Webinterface
+* Puppet Enterprise Console as Web interface
 * Additional Components
   * Puppet Node Manager - group nodes on facts
   * Puppet Code Manager - combines r10k, Jenkins and beaker for testing and deploying code
@@ -46,9 +46,9 @@
 * Automated Provisioning for some platforms
 * Vendor support and service
 
-## Facter
+## OpenFact/Facter
 
-* Facter returns (JSON format) key value pairs named facts
+* OpenFact/Facter returns (JSON format) key value pairs named facts
 * It is used by Puppet to gather information about the node
 * You can also run it on command line `puppet facts` to list facts
 
@@ -85,6 +85,9 @@ To get a special value of the structured data, use for example:
 
 ```console
 $ puppet facts disks.vda --render-as yaml
+```
+
+```yaml
 ---
 disks.vda:
   size: "10.00 GiB",
@@ -94,6 +97,9 @@ disks.vda:
 
 ```console
 $ puppet facts disks.vda.size
+````
+
+```json
 {
   "disks.vda.size": "10.00 GiB"
 }
@@ -117,7 +123,7 @@ Writing your own facts to extend the functionality of facter.
   * /opt/puppetlabs/facter/facts.d/
   * /etc/puppetlabs/facter/facts.d/
   * /etc/facter/facts.d/
-  * or remeber later if you reach the chapter about modules
+  * or remember later if you reach the chapter about modules
 * simple text file
 
 ```bash
@@ -128,7 +134,7 @@ key2=value2
 * Every executable that supplies to stdout key-value-pairs as
   * yaml
   * json
-* Structured data as output is also pussible with executables
+* Structured data as output is also possible with executables
 * use `puppet facts` to catch all facts also the external one, because
   * old `facter` cli returns core facts only
   * even if the `-p` option also includes your own written facts
@@ -156,7 +162,7 @@ diff <(facter) <(facter -p)
 ### Agent as Service
 
 * Agent runs as a service
-  * Interval is configureable
+  * Interval is configurable
   * Splay can be added for spread agent runs
   * Default interval is 30 minutes
 * Cronjob can be used as alternative
@@ -169,6 +175,9 @@ diff <(facter) <(facter -p)
 
 ```console
 $ puppet config print
+```
+
+```text
 agent_catalog_run_lockfile = /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
 agent_disabled_lockfile = /opt/puppetlabs/puppet/cache/state/agent_disabled.lock
 allow_duplicate_certs = false
@@ -182,8 +191,11 @@ basemodulepath = /etc/puppetlabs/code/modules:/opt/puppetlabs/puppet/modules
 
 * or for only one special option:
 
-```terminal
+```console
 $ puppet config print ssldir
+```
+
+```text
 /etc/puppetlabs/puppet/ssl
 ```
 
@@ -191,8 +203,8 @@ $ puppet config print ssldir
 
 **Practice**
 * Check out the current state of `report` that controls the sending of reports
-* Change the behavoir
-* After that take a look in the confiuguration file `puppet.conf`
+* Change the behavior
+* After that take a look in the configuration file `puppet.conf`
 
 A sample solution can be found [here](./solutions/15_puppet_config.md).
 
@@ -208,7 +220,7 @@ type { 'title':
 }
 ```
 
-* Different types of resources have a differnt set of attributes
+* Different types of resources have a different set of attributes
 * But there are attributes, the so-called **meta attributes**, which exist for every resource type
 * With **defined resources** you can define your own types to extend Puppet
 
@@ -252,13 +264,12 @@ A list can be generated with the `puppet describe -l` command!
 
 #### Providers
 
-* Availability of a provider is determinated by testing for availability of required binaries
-* Can be marked as default for specific facts (typically operatingsystem)
+* Availability of a provider is determined by testing for availability of required binaries
+* Can be marked as default for specific facts (typically operating system)
 * Can support all or only a subset of features a resource type requires
 * Example for resource package
   * **Providers**: *aix appdmg apple apt aptitude aptrpm blastwave dnf dpkg fink freebsd gem hpux macports nim openbsd pkg pacman pip3 pip pkg pkgdmg pkgin pkgng pkgutil portage ports portupgrade puppet_gem rpm rug sun sunfreeware up2date urpmi windows yum zypper*
-  * **Features**: *holdable install_options installable package_settings purgeable reinstallable uninstall_options unins
-tallable upgradeable versionable virtual_packages*
+  * **Features**: *holdable install_options installable package_settings purgeable reinstallable uninstall_options uninstallable upgradeable versionable virtual_packages*
 * With the **meta parameter** `provider`, the provider can be explicitly selected for each resource
 
 #### Puppet Resource Command
@@ -269,6 +280,9 @@ tallable upgradeable versionable virtual_packages*
 
 ```console
 $ puppet resource package vim-enhanced
+```
+
+```puppet
 package { 'vim-enhanced':
   ensure => 'purged',
 }
@@ -276,6 +290,9 @@ package { 'vim-enhanced':
 
 ```console
 $ puppet resource package vim-enhanced ensure=present
+```
+
+```puppet
 Notice: /Package[vim-enhanced]/ensure: created
 package { 'vim-enhanced':
   ensure => '7.4.160-1.el7',
@@ -325,7 +342,7 @@ In the same way as for the agent. But with an additional section (INI) `server` 
 * Data Store:
   * Facts(last run)
   * Catalog (last run)
-  * Reports (optional, timefram configurable)
+  * Reports (optional, timeframe configurable)
 * Enables:
   * Features like exported resources
   * API to query the data
@@ -338,7 +355,7 @@ In the same way as for the agent. But with an additional section (INI) `server` 
 
 * The Puppet apply command combines server and agent functionality
   * Takes a file containing Puppet code
-  * Gathers information using facter
+  * Gathers information using Facter
   * Compiles a catalog
   * Enforces the configuration
   * Can also run in simulation mode

@@ -4,6 +4,7 @@
 
 * Puppet allows you to declare resource defaults
 * Default to the entire namespace, e.g. the entire class
+* Available for all namespaces when set in node classification (manifests/site.pp)
 
 ```puppet
 Type {
@@ -47,7 +48,7 @@ file {
 * Use several File resources of different types of `directory`, `file` and `link`
 * Add new class to your node declaration
 * Test your code locally and in a dedicated environment with an agent run
-* Merge and push the changes after all tests were sucessful
+* Merge and push the changes after all tests were successful
 
 A sample solution can be found [here](./solutions/110_defaults.md).
 
@@ -69,6 +70,7 @@ A sample solution can be found [here](./solutions/110_defaults.md).
 
 * Good for assigning conditional values to variables
 * and for simple non-extensive selection
+* **must** return a value
 
 ```puppet
 $apache_package = $facts['os']['family'] ? {
@@ -87,6 +89,7 @@ package { 'apache':
 * Ideal for:
   * Setting multiple variables at once
   * Choosing different branches of code
+  * defaults are optional
 
 ```puppet
 case $facts['os']['family'] {
@@ -104,6 +107,7 @@ case $facts['os']['family'] {
 ### If Statement
 
 * Used to make a choice based on a truth value
+* else and elsif are optional
 * Can use:
   * boolean value
   * conditional expressions
@@ -151,9 +155,11 @@ unless $ensure =~ /^(absent|purged)$/ {
 }
 ```
 
+**Notice**: Many Open Source developers consider the usage of `unless` in combination with `else` as not optional. Use `if`, `else` in this case.
+
 **Practice**:
 
-* Use a condional to manage time servers with `chrony` only on RedHat platforms and with `systemd` on Debian.
+* Use a conditional to manage time servers with `chrony` only on RedHat platforms and with `systemd` on Debian.
 * Add `time_servers`, e.g. `ptbtime1.ptb.de` to `common.yaml` hiera data file
 * Do also the complete git/puppet workflow
 
@@ -164,8 +170,8 @@ A sample solution can be found [here](./solutions/120_conditionals.md).
 
 * By default the lookup returns the first match
 * In addition to the automatic lookup, there is also a function
-* But automatic lookp is to be preferred, as it is significantly faster
-* First paramter is the key
+* But automatic lookup is to be preferred, as it is significantly faster
+* First parameter is the key
 * Last one the default to set if no key was found
 
 ```puppet
@@ -181,8 +187,8 @@ lookup('profile::base::packages', undef, undef, [])
 lookup('base::packages', Array[String], 'unique')
 ```
 
-|Value   | Behavior                                                                        |
-|--------|---------------------------------------------------------------------------------|
+| Value  | Behavior                                                                        |
+| --------| ---------------------------------------------------------------------------------|
 | first  | Returns the first value found, with no merging. The default                     |
 | unique | Called array merge. You get a flattened array with all duplicate values removed |
 | hash   | Return a merged hash. Without duplicate keys. Highest priority (level) win.     |
@@ -235,7 +241,7 @@ The Hiera Data Manager ([HDM](https://github.com/betadots/hdm)) is a graphical u
   * local SQLite database
   * LDAP connection to a Server, e.g. Microsoft Active Directory
   * Admin only manage additional user accounts, no data
-* Autorization (Roll Based Access Controll) via Groups
+* Authorization (Role Based Access Control) via Groups
   * Down to environment, node and key level
 
 ![HDM](images/hdm_auth.png)
@@ -268,7 +274,7 @@ node default {
 }
 ```
 
-* Remember: There is a way to store and read trused information in and from the agent certificate
+* Remember: There is a way to store and read trusted information in and from the agent certificate
 * Have a look at your certificate in `/etc/puppetlabs/puppet/ssl/certs` 
 * But notice: HDM isn't able to evaluate this, it's just DSL code
 
@@ -300,7 +306,7 @@ X509v3 Subject Key Identifier:
 ```
 
 * `/etc/puppetlabs/puppet/csr_attributes.yaml` configures the certificate request
-* Only works on the first agent run if no certificat exists yet
+* Only works on the first agent run if no certificate exists yet
 * Stored in `$trusted[extensions]` as hash
 
 ```yaml
@@ -439,7 +445,7 @@ A sample solution can be found [here](./solutions/150_ordering.md).
 * Simple Ordering:
   * before: Package['openssh-server'] -> File['sshd_config']
   * require: Package['openssh-server'] <- File['sshd_config']
-* Add the new class to yout role `webserver`
+* Add the new class to your role `webserver`
 
 * Refresh Events:
   * notify: File['sshd_config'] ~> Service['sshd']
@@ -458,7 +464,7 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 
 ## Iterations
 
- Puppet comes with some lambdas to do loops and itertations
+ Puppet comes with some lambdas to do loops and iterations
   * each - repeat a code block for each object
   * slice - repeat a code block a given number of times
   * filter - remove non-matching elements
