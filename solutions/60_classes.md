@@ -15,7 +15,7 @@
     $ vim manifests/site.pp
 ```
 
-* add your code to yout node declaration in `manifests/site.pp`
+* add your code to your node declaration in `manifests/site.pp`
 
 ```puppet
     node default {

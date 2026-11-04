@@ -35,7 +35,7 @@
     }
 ```
 
-**Tip**: copy the config file from a installation you did and remove the package, remeber the `puppet resource` command.
+**Tip**: copy the config file from a installation you did and remove the package, remember the `puppet resource` command.
 
 ```bash
     $ puppet resource package nginx ensure=installed
@@ -44,6 +44,8 @@
     $ cp /etc/nginx/nginx.conf site-modules/profile/files/
 
     $ puppet resource package nginx ensure=purged
+
+    # Note: it is important to use purge!!!
 
     $ vim data/roes/webserver.yaml
 ```
@@ -55,8 +57,6 @@
       - profile::myapp
       - profile::nginx
 ```
-
-A sample solution can be found [here](./solutions/150_ordering.md).
 
 ### Bonus
 

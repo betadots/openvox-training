@@ -10,7 +10,6 @@ In the following, some concepts are mentioned that will be explained and expande
   * classes (a bundle of logically related resources)
   * and some other properties
 
-
 ## Rule everything: The Control Repository
 
 * A version controlled repository (here we will use git)
@@ -86,7 +85,6 @@ A sample solution can be found [here](./solutions/30_classification.md).
   * Query configuration management database
   * Communication with a web frontend
 
-
 ## Variables and Facts
 
 **Syntax**:
@@ -107,7 +105,7 @@ $motd_file = '/etc/motd'
 * Different data types
 * Actually are constants!
 
-**Interpolation**
+**Interpolation**:
 
 ```puppet
 $motd_file = "${conf_dir}/motd"
@@ -123,7 +121,7 @@ $motd_file = "${conf_dir}/motd"
 
 A sample solution can be found [here](./solutions/40_variables.md).
 
-### Access to Variables in differnt scopes
+### Access to Variables in different scopes
 
 Shortname accesses via resolving
 

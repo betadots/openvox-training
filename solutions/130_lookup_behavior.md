@@ -63,7 +63,9 @@
       }
     }
 ```
-  
+
+**Hint** `stdlib::ensure_packages` adds package resources programmatically. If you want to ensure strict ordering, please consider using an [iteration](../40_code-logic.md#iterations)
+
 * Use a node specific, os specific list of packages and a default one in `common.yaml`
 
 ```bash

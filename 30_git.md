@@ -13,7 +13,7 @@ Git is a distributed version control system that tracks versions of files.
 ## Basic git commands
 
 | Commands                     | Description                           |
-| ------------------------------| ---------------------------------------|
+| ---------------------------- | ------------------------------------- |
 | git clone                    | download to working space             |
 | git status, log, diff        | shoe status, history, differences     |
 | git add, rm, mv, commit      | transfer change to git                |
@@ -84,13 +84,12 @@ To /root/repo
 
 A sample solution can be found [here](./solutions/100_create_git.md).
 
-
 ## Branches
 
 * Create
   * git branch \<branch name>; git checkout <branch name>
   * git switch -c \<branch name>
-  * git checkout -c \<branch name>
+  * git checkout -b \<branch name>
 * Check state
   * git status
 * Rename
@@ -133,7 +132,7 @@ Deleted branch lbetz/fix-433 (was 29907a5).
 ## Working with remote repositories
 
 * Connection
-  * git add \| rm remote \<remote name> \<URL>
+  * git remote add \| rm \<remote name> \<URL>
 * Synchronize
   * git pull \[remote name]
   * git push \[remote name] \[branch name]

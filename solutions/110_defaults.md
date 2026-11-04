@@ -21,7 +21,6 @@
     class profile::myapp {
       file {
         default:
-          ensure => file,
           mode   => '0640',
           owner  => 'root',
           group  => 'root',
@@ -62,11 +61,11 @@
 
     $ puppet agent -t --environment student<N>-myapp
 ```
-     
+
 * Merge and push the changes after all tests were sucessful
 
 ```bash
-    $ git checkout student<N>
+    $ git switch student<N>
     $ git merge student<N>-myapp
     $ git push origin student<N>
 

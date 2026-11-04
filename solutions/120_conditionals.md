@@ -70,7 +70,7 @@ profile::time_servers:
 
     $ puppet agent -t --environment student<N>-ntp
 
-    $ git checkout student<N>
+    $ git switch student<N>
     $ git merge student<N>-ntp
     $ git push origin student<N>
 

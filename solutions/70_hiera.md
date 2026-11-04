@@ -2,7 +2,7 @@
 
 ## Hiera
 
-* Rewrite your node declarition to use only an `include motd` instead of a declaration with `class`
+* Rewrite your node declaration to use only an `include motd` instead of a declaration with `class`
 
 ```puppet
     node default {
@@ -17,13 +17,13 @@
     motd::content: 'Welcome to the world of OpenVox!'
 ```
 
-* Run `puppet aplly` and check the result
+* Run `puppet apply` and check the result
 
 ```bash
     $ puppet apply manifests/site.pp
 ```
 
-* Add a diffrent value to the same key in `data/nodes/<your certname>.yaml`
+* Add a different value to the same key in `data/nodes/<your certname>.yaml`
 
 ```bash
     $ mkdir data/nodes

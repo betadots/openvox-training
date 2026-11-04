@@ -9,13 +9,13 @@
     true
 ```
 
-* Change the behavoir
+* Change the behavior
 
 ```bash
     $ puppet config set report false
 ```
 
-* After that take a look in the confiuguration file `puppet.conf`
+* After that take a look in the configuration file `puppet.conf`
 
 ```bash
     $ cat /etc/puppetlabs/puppet/puppet.conf

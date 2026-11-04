@@ -73,6 +73,17 @@
     }
 ```
 
+* Add example data to `data/common.yaml`
+
+```yaml
+---
+profile::base::users:
+  'user1': {}
+  'user2':
+    'public_keys':
+      'key1': 'AAAAAA-BBBBB'
+```
+
 ### Bonus
 
 * Add the option to remove users and their keys again

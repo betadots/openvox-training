@@ -1,21 +1,21 @@
-# Bolt
+# OpenBolt
 
-Bolt is an open-source task automation tool that allows you to remotely execute commands, scripts, and tasks on remote systems.
+OpenBolt is an open-source task automation tool that allows you to remotely execute commands, scripts, and tasks on remote systems.
 
 ## Run Commands and Scripts
 
-```
+```console
 bolt help command run
 bolt command run 'pwd' --targets 192.168.64.179 --native-ssh --user cloud
 ```
 
-```
+```console
 bolt script run ./script.sh --targets 192.168.64.179 --native-ssh --user cloud
 ```
 
 ## Starting a Bolt Project
 
-```
+```text
 ./
 |-- bolt-project.yaml
 |-- inventory.yaml
@@ -35,8 +35,8 @@ bolt project init [project name]
 ```
 
 * `bolt-poject.yaml`
- * project name
- * optional the required modules (for your plans maybe).
+  * project name
+  * optional the required modules (for your plans maybe).
 * `inventory.yaml`
   * target definition
   * target grouping
@@ -65,7 +65,7 @@ config:
 
 **Note**: Overrides the options from the command line
 
-```
+```console
 bolt command run 'pwd' --targets student1
 ```
 
